@@ -8,8 +8,8 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
-        <li class="comment">
+      <ul class="comments" id="comments">
+        <li class="comment" id="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
             <div>12.02.22 12:18</div>
@@ -48,16 +48,20 @@
         <input
           type="text"
           class="add-form-name"
+          id="add-form-name"
           placeholder="Введите ваше имя"
+          value=""
         />
         <textarea
           type="textarea"
           class="add-form-text"
+          id="add-form-text"
           placeholder="Введите ваш коментарий"
-          rows="4"
+          rows="4" 
+          aria-valuetext=""
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button class="add-form-button" id="add-form-button">Написать</button>
         </div>
       </div>
     </div>
@@ -65,7 +69,40 @@
 
   <script>
     "use strict";
-    // Код писать здесь
+    const addFormButtonElement = document.getElementById("add-form-button");
+    const addFormTextElement = document.getElementById("add-form-text");
+    const addFormNameElement = document.getElementById("add-form-name");
+    const addFormElement = document.getElementByClassName("add-form");
+    const commentsList = document.getElementById("comments");
+    const commentElement = document.getElementById("comment");
+
+    addFormButtonElement.addEventListener("click", () => {
+const name = addFormButtonElement.value.trim();
+const text = addFormTextElement.value.trim();
+const newComment = document.createElement("li");
+newComment.classList.add("comment");
+const curentDate = new Date();
+const comDate = `${curentDate.getDate()}.${curentDate.getMonth()}.${curentDate.getFullYear()}`;
+newComment.innerHTML = `<li class="comment" id="comment">
+          <div class="comment-header">
+            <div>${name}</div>
+            <div>${comDate}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${text}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">3</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>`
+        addFormNameElement.value = "";
+        addFormTextElement.value = "";
+        });
     console.log("It works!");
   </script>
 </html>
