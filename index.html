@@ -10,40 +10,7 @@
 <body>
   <div class="container">
     <ul class="comments" id="comments">
-      <li class="comment" id="comment">
-        <div class="comment-header">
-          <div>Глеб Фокин</div>
-          <div>12.02.22 12:18</div>
-        </div>
-        <div class="comment-body">
-          <div class="comment-text">
-            Это будет первый комментарий на этой странице
-          </div>
-        </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">3</span>
-            <button class="like-button"></button>
-          </div>
-        </div>
-      </li>
-      <li class="comment">
-        <div class="comment-header">
-          <div>Варвара Н.</div>
-          <div>13.02.22 19:22</div>
-        </div>
-        <div class="comment-body">
-          <div class="comment-text">
-            Мне нравится как оформлена эта страница! ❤
-          </div>
-        </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">75</span>
-            <button class="like-button -active-like"></button>
-          </div>
-        </div>
-      </li>
+      <!-- список рендерится из JS -->
     </ul>
     <div class="add-form">
       <input type="text" class="add-form-name" id="add-form-name" placeholder="Введите ваше имя" value="" />
@@ -94,21 +61,25 @@
       name: "Глеб Фокин",
       comment: "Это будет первый комментарий на этой странице",
       like: 3,
+      isLike: "",
     },
     {
       name: "Варвара Н.",
-      name: "Мне нравится как оформлена эта страница! ❤",
+      comment: "Мне нравится как оформлена эта страница! ❤",
       like: 75,
+      isLike: "",
     }
   ];
 
   const initEventListener = () => {
-    likesCounterElement.value -= 1;
+    likesCounterElement.value = 0;
     likesButtonElement.innerHTML = `<button class="like-button"></button>`;
     for (const likeButtonElement of likesButtonElement) {
       likeButtonElement.addEventListener("click", () => {
-        likesCounterElement.value += 1;
-        likesButtonElement.innerHTML = `<button class="like-button -active-like"></button>`;
+        const index = likesButtonElement.dataset.index;
+        commentsListData[index].like += 1;
+        renderCommentsList();
+        console.log(index);
       })
     }
   };
@@ -116,29 +87,27 @@
   initEventListener();
 
   const renderCommentsList = () => {
-    commentsList.HTML = commentsListData.map((com) => {
+    const commentsListHTML = commentsListData.map((com, index) => {
         return `<li class="comment" id="comment">
           <div class="comment-header">
-            <div>${commentsListData.name}</div>
+            <div>${com.name}</div>
             <div>${comDate}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${commentsListData.comment}
+              ${com.comment}
             </div>
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">${commentsListData.like}</span>
-              <button class="like-button"></button>
+              <span class="likes-counter">${com.like}</span>
+              <button class="like-button" data-index="${index}"></button>
             </div>
           </div>
         </li>`
-        likesCounterElement.value = "";
-        addFormNameElement.value = "";
-        addFormTextElement.value = "";
       })
       .join("");
+    commentsListElements.innerHTML = commentsListHTML;
     initEventListener();
   };
 
@@ -159,25 +128,18 @@
       return;
     }
 
-    commentsListElements.innerHTML = allcomments +
-      `<li class="comment" id="comment">
-          <div class="comment-header">
-            <div>${commentsListData.name}</div>
-            <div>${comDate}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${commentsListData.comment}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">${commentsListData.like}</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>`
+    commentsListData.push({
+      name: addFormNameElement.value,
+      comment: addFormTextElement.value,
+      like: likesCounterElement.value,
+      isLike: likesButtonElement.value,
+    });
+    addFormNameElement.value = ""
+    addFormTextElement.value = ""
+    likesCounterElement.value = ""
+    likesButtonElement.value = ""
     initEventListener()
+    renderCommentsList();
   });
   console.log("It works!");
 </script>
