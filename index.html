@@ -61,25 +61,30 @@
       name: "Глеб Фокин",
       comment: "Это будет первый комментарий на этой странице",
       like: 3,
-      isLike: "",
+      isLike: false,
     },
     {
       name: "Варвара Н.",
       comment: "Мне нравится как оформлена эта страница! ❤",
       like: 75,
-      isLike: "",
+      isLike: false,
     }
   ];
 
   const initEventListener = () => {
     likesCounterElement.value = 0;
-    likesButtonElement.innerHTML = `<button class="like-button"></button>`;
+    const likesButtonElement = document.querySelectorAll(".like-button");
     for (const likeButtonElement of likesButtonElement) {
       likeButtonElement.addEventListener("click", () => {
-        const index = likesButtonElement.dataset.index;
-        commentsListData[index].like += 1;
-        renderCommentsList();
-        console.log(index);
+        const index = likeButtonElement.dataset.index;
+        if (commentsListData[index].isLike === false) {
+          commentsListData[index].isLike = true;
+          commentsListData[index].like--;
+        } else {
+          commentsListData[index].isLike = false;
+          commentsListData[index].like++;
+        }
+        renderCommentsList()
       })
     }
   };
@@ -115,25 +120,23 @@
 
   addFormButtonElement.addEventListener("click", () => {
     const allcomments = commentsListElements.innerHTML;
-
     addFormNameElement.style.backgroundColor = "";
     if (addFormNameElement.value === "") {
       addFormNameElement.style.backgroundColor = "red";
       return;
     }
-
     addFormTextElement.style.backgroundColor = "";
     if (addFormTextElement.value === "") {
       addFormTextElement.style.backgroundColor = "red";
       return;
     }
-
     commentsListData.push({
       name: addFormNameElement.value,
       comment: addFormTextElement.value,
       like: likesCounterElement.value,
       isLike: likesButtonElement.value,
     });
+    
     addFormNameElement.value = ""
     addFormTextElement.value = ""
     likesCounterElement.value = ""
@@ -141,6 +144,7 @@
     initEventListener()
     renderCommentsList();
   });
+
   console.log("It works!");
 </script>
 
