@@ -75,8 +75,10 @@
     likesCounterElement.value = 0;
     const likesButtonElement = document.querySelectorAll(".like-button");
     for (const likeButtonElement of likesButtonElement) {
-      likeButtonElement.addEventListener("click", () => {
+      likeButtonElement.addEventListener("click", (event) => {
+        event.stopPropagation();
         const index = likeButtonElement.dataset.index;
+        const isLiked = likeButtonElement.classList.contains("-active-like");
         if (commentsListData[index].isLike === false) {
           commentsListData[index].isLike = true;
           commentsListData[index].like--;
@@ -89,12 +91,29 @@
     }
   };
 
+  const answerCommentListener = () => {
+    const commentsElement = document.querySelectorAll(".comment");
+    for (const commentElement of commentsElement) {
+      commentElement.addEventListener("click", () => {
+        const index = commentElement.dataset.index;
+        commentElement.value = commentsListData[index].comment + commentsListData[index].name;
+        console.log("index");
+
+        // renderCommentsList();
+
+
+      })
+    }
+  };
+
+  answerCommentListener();
+
   initEventListener();
 
   const renderCommentsList = () => {
     const commentsListHTML = commentsListData.map((com, index) => {
-        return `<li class="comment" id="comment">
-          <div class="comment-header">
+        return `<li class="comment" id="comment" data-index="${index}">
+          <div class="comment-header" >
             <div>${com.name}</div>
             <div>${comDate}</div>
           </div>
@@ -106,7 +125,7 @@
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">${com.like}</span>
-              <button class="like-button" data-index="${index}"></button>
+              <button class="${com.isLike ? 'like-button -active-like' : 'like-button'}" data-index="${index}"></button>
             </div>
           </div>
         </li>`
@@ -131,17 +150,24 @@
       return;
     }
     commentsListData.push({
-      name: addFormNameElement.value,
-      comment: addFormTextElement.value,
+      name: addFormNameElement.value
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("&", "&amp;")
+        .replaceAll('"', "&quot;"),
+      comment: addFormTextElement.value
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("&", "&amp;")
+        .replaceAll('"', "&quot;"),
       like: likesCounterElement.value,
       isLike: likesButtonElement.value,
     });
-    
+
     addFormNameElement.value = ""
     addFormTextElement.value = ""
     likesCounterElement.value = ""
     likesButtonElement.value = ""
-    initEventListener()
     renderCommentsList();
   });
 
