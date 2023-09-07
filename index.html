@@ -81,10 +81,10 @@
         const isLiked = likeButtonElement.classList.contains("-active-like");
         if (commentsListData[index].isLike === false) {
           commentsListData[index].isLike = true;
-          commentsListData[index].like--;
+          commentsListData[index].like++;
         } else {
           commentsListData[index].isLike = false;
-          commentsListData[index].like++;
+          commentsListData[index].like--;
         }
         renderCommentsList()
       })
