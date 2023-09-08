@@ -91,25 +91,6 @@
     }
   };
 
-  const answerCommentListener = () => {
-    const commentsElement = document.querySelectorAll(".comment");
-    for (const commentElement of commentsElement) {
-      commentElement.addEventListener("click", () => {
-        const index = commentElement.dataset.index;
-        commentElement.value = commentsListData[index].comment + commentsListData[index].name;
-        console.log("index");
-
-        // renderCommentsList();
-
-
-      })
-    }
-  };
-
-  answerCommentListener();
-
-  initEventListener();
-
   const renderCommentsList = () => {
     const commentsListHTML = commentsListData.map((com, index) => {
         return `<li class="comment" id="comment" data-index="${index}">
@@ -137,6 +118,31 @@
 
   renderCommentsList();
 
+  const answerCommentListener = () => {
+    const commentsElement = document.querySelectorAll(".comment");
+    for (const commentElement of commentsElement) {
+      commentElement.addEventListener("click", () => {
+        const index = commentElement.dataset.index;
+        const addFormTextElement = document.getElementById("add-form-text");
+        const boxTextComment = document.querySelectorAll(".comment-body");
+        addFormTextElement.value =
+          `QUOTE_BEGIN ${commentsListData[index].name}: ${commentsListData[index].comment} QUOTE_END`;
+        renderCommentsList();
+        const stileQuote = document.querySelectorAll(".quote");
+        stileQuote.style.boxSizing = "border-box";
+        stileQuote.style.backgroundColor = "white";
+        // stileQuote.innerHTML =
+        // `<div class='quote' stile='box-sizing: border-box; backgroundColor: white;'>${commentsListData[index].name}:\n${commentsListData[index].comment}</div>`;
+        return;
+        console.log("index");
+      })
+    }
+
+  };
+
+  renderCommentsList();
+  answerCommentListener();
+
   addFormButtonElement.addEventListener("click", () => {
     const allcomments = commentsListElements.innerHTML;
     addFormNameElement.style.backgroundColor = "";
@@ -159,7 +165,9 @@
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll("&", "&amp;")
-        .replaceAll('"', "&quot;"),
+        .replaceAll('"', "&quot;")
+        .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
+        .replaceAll("QUOTE_END", "</div>"),
       like: likesCounterElement.value,
       isLike: likesButtonElement.value,
     });
@@ -167,7 +175,7 @@
     addFormNameElement.value = ""
     addFormTextElement.value = ""
     likesCounterElement.value = ""
-    likesButtonElement.value = ""
+    likesButtonElement.isLike = true
     renderCommentsList();
   });
 
