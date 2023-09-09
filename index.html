@@ -126,18 +126,10 @@
         const addFormTextElement = document.getElementById("add-form-text");
         const boxTextComment = document.querySelectorAll(".comment-body");
         addFormTextElement.value =
-          `QUOTE_BEGIN ${commentsListData[index].name}: ${commentsListData[index].comment} QUOTE_END`;
-        renderCommentsList();
-        const stileQuote = document.querySelectorAll(".quote");
-        stileQuote.style.boxSizing = "border-box";
-        stileQuote.style.backgroundColor = "white";
-        // stileQuote.innerHTML =
-        // `<div class='quote' stile='box-sizing: border-box; backgroundColor: white;'>${commentsListData[index].name}:\n${commentsListData[index].comment}</div>`;
-        return;
-        console.log("index");
+          `QUOTE_BEGIN ${commentsListData[index].name}: 
+          ${commentsListData[index].comment} QUOTE_END`;
       })
     }
-
   };
 
   renderCommentsList();
@@ -169,13 +161,12 @@
         .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
         .replaceAll("QUOTE_END", "</div>"),
       like: likesCounterElement.value,
-      isLike: likesButtonElement.value,
+      isLike: likesButtonElement.value = false,
     });
 
     addFormNameElement.value = ""
     addFormTextElement.value = ""
     likesCounterElement.value = ""
-    likesButtonElement.isLike = true
     renderCommentsList();
   });
 
