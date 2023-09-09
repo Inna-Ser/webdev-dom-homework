@@ -20,7 +20,11 @@
         <button class="add-form-button" id="add-form-button">Написать</button>
       </div>
     </div>
+    <div class="add-form-row">
+      <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
+    </div>
   </div>
+
 </body>
 
 <script>
@@ -128,46 +132,74 @@
         addFormTextElement.value =
           `QUOTE_BEGIN ${commentsListData[index].name}: 
           ${commentsListData[index].comment} QUOTE_END`;
+        renderCommentsList();
       })
     }
   };
 
-  renderCommentsList();
   answerCommentListener();
 
-  addFormButtonElement.addEventListener("click", () => {
-    const allcomments = commentsListElements.innerHTML;
-    addFormNameElement.style.backgroundColor = "";
-    if (addFormNameElement.value === "") {
-      addFormNameElement.style.backgroundColor = "red";
-      return;
-    }
-    addFormTextElement.style.backgroundColor = "";
-    if (addFormTextElement.value === "") {
-      addFormTextElement.style.backgroundColor = "red";
-      return;
-    }
-    commentsListData.push({
-      name: addFormNameElement.value
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll("&", "&amp;")
-        .replaceAll('"', "&quot;"),
-      comment: addFormTextElement.value
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll("&", "&amp;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
-        .replaceAll("QUOTE_END", "</div>"),
-      like: likesCounterElement.value,
-      isLike: likesButtonElement.value = false,
+  const delLastComment = () => {
+    const delCommentButton = document.getElementById("del-form-button");
+    delCommentButton.addEventListener("click", () => {
+      commentsListData.pop();
+      renderCommentsList();
     });
+  }
 
-    addFormNameElement.value = ""
-    addFormTextElement.value = ""
-    likesCounterElement.value = ""
-    renderCommentsList();
+  delLastComment();
+
+  const pullComment = () => {
+    addFormButtonElement.addEventListener("click", () => {
+      const allcomments = commentsListElements.innerHTML;
+      addFormNameElement.style.backgroundColor = "";
+      if (addFormNameElement.value === "") {
+        addFormNameElement.style.backgroundColor = "red";
+        addFormButtonElement.ariaDisabled = true;
+        addFormButtonElement.style.backgroundColor = "grey";
+        return;
+      } else {
+        addFormButtonElement.style.backgroundColor = "#bcec30";
+
+      }
+      addFormTextElement.style.backgroundColor = "";
+      if (addFormTextElement.value === "") {
+        addFormTextElement.style.backgroundColor = "red";
+        addFormButtonElement.ariaDisabled = true;
+        addFormButtonElement.style.backgroundColor = "grey";
+        return;
+      }
+      commentsListData.push({
+        name: addFormNameElement.value
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;"),
+        comment: addFormTextElement.value
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
+          .replaceAll("QUOTE_END", "</div>"),
+        like: likesCounterElement.value,
+        isLike: likesButtonElement.value = false,
+      });
+
+      addFormNameElement.value = ""
+      addFormTextElement.value = ""
+      likesCounterElement.value = ""
+      renderCommentsList();
+    });
+  }
+  pullComment();
+
+  document.addEventListener("keyup", (event) => {
+    if (event.code == 'KeyEnter') {
+      pullComment();
+      renderCommentsList();
+      console.log("enter")
+    }
   });
 
   console.log("It works!");
