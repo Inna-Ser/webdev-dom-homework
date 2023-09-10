@@ -137,6 +137,9 @@ body {
   border: none;
   border-radius: 18px;
   cursor: pointer;
+  & delete {
+    
+  }
 }
 
 .add-form-button:hover {

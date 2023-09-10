@@ -32,13 +32,15 @@
   const addFormButtonElement = document.getElementById("add-form-button");
   const addFormTextElement = document.getElementById("add-form-text");
   const addFormNameElement = document.getElementById("add-form-name");
-  const addFormElement = document.getElementById("add-form");
   const commentsListElements = document.getElementById("comments");
 
+  const editCommentsButton = document.querySelectorAll(".add-form-button edit");
+  const addForm = document.querySelectorAll(".add-form");
   const commentsList = document.querySelectorAll(".comments");
   const commentElement = document.querySelectorAll(".comment");
   const likesButtonElement = document.querySelectorAll(".like-button");
   const likesCounterElement = document.querySelectorAll(".likes-counter");
+  // const commentText = document.querySelectorAll(".comment-text");
 
   let currentDate = new Date();
   let date = currentDate.getDate();
@@ -66,12 +68,14 @@
       comment: "Это будет первый комментарий на этой странице",
       like: 3,
       isLike: false,
+      isEdit: false,
     },
     {
       name: "Варвара Н.",
       comment: "Мне нравится как оформлена эта страница! ❤",
       like: 75,
       isLike: false,
+      isEdit: false,
     }
   ];
 
@@ -95,6 +99,56 @@
     }
   };
 
+  const answerCommentListener = () => {
+    const commentsElement = document.querySelectorAll(".comment");
+    for (const commentElement of commentsElement) {
+      commentElement.addEventListener("click", () => {
+        const index = commentElement.dataset.index;
+        const addFormTextElement = document.getElementById("add-form-text");
+        const boxTextComment = document.querySelectorAll(".comment-body");
+        addFormTextElement.value =
+          `QUOTE_BEGIN ${commentsListData[index].name}: 
+          ${commentsListData[index].comment} QUOTE_END`;
+        renderCommentsList();
+
+      })
+    }
+  };
+
+  const delLastComment = () => {
+    const delCommentButton = document.getElementById("del-form-button");
+    delCommentButton.addEventListener("click", () => {
+      commentsListData.pop();
+      renderCommentsList();
+    });
+  }
+
+  const editComment = () => {
+    const editCommentsButton = document.querySelectorAll(".add-form-button edit");
+    for (const editCommentButton of editCommentsButton) {
+      editCommentButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const index = commentElement.dataset.index;
+        const addFormTextElement = document.getElementById("add-form-text");
+        const addFormNameElement = document.getElementById("add-form-name");
+        addFormNameElement.value = commentsListData[index].name;
+        addFormTextElement.value = commentsListData[index].comment;
+        renderCommentsList();
+      })
+    }
+  };
+
+  /*const addByKey = () => {
+    const addForm = document.querySelectorAll(".add-form");
+    addForm.addEventListener("keyup", (event) => {
+      if (event.code === "Enter") {
+        pullComment();
+        console.log("enter")
+      }
+      renderCommentsList();
+    })
+  };*/
+
   const renderCommentsList = () => {
     const commentsListHTML = commentsListData.map((com, index) => {
         return `<li class="comment" id="comment" data-index="${index}">
@@ -108,59 +162,40 @@
             </div>
           </div>
           <div class="comment-footer">
+            
             <div class="likes">
               <span class="likes-counter">${com.like}</span>
               <button class="${com.isLike ? 'like-button -active-like' : 'like-button'}" data-index="${index}"></button>
             </div>
+            
           </div>
+          <div class="add-form-row">
+              <div class=""></div>
+              <button class="add-form-button edit" id="edit-form-button">Редактировать</button>
+            </div
         </li>`
       })
       .join("");
     commentsListElements.innerHTML = commentsListHTML;
     initEventListener();
+    answerCommentListener();
+    delLastComment();
+    editComment();
+    addByKey();
   };
 
   renderCommentsList();
 
-  const answerCommentListener = () => {
-    const commentsElement = document.querySelectorAll(".comment");
-    for (const commentElement of commentsElement) {
-      commentElement.addEventListener("click", () => {
-        const index = commentElement.dataset.index;
-        const addFormTextElement = document.getElementById("add-form-text");
-        const boxTextComment = document.querySelectorAll(".comment-body");
-        addFormTextElement.value =
-          `QUOTE_BEGIN ${commentsListData[index].name}: 
-          ${commentsListData[index].comment} QUOTE_END`;
-        renderCommentsList();
-      })
-    }
-  };
-
-  answerCommentListener();
-
-  const delLastComment = () => {
-    const delCommentButton = document.getElementById("del-form-button");
-    delCommentButton.addEventListener("click", () => {
-      commentsListData.pop();
-      renderCommentsList();
-    });
-  }
-
-  delLastComment();
-
   const pullComment = () => {
     addFormButtonElement.addEventListener("click", () => {
       const allcomments = commentsListElements.innerHTML;
+      addFormButtonElement.style.backgroundColor = "#bcec30";
       addFormNameElement.style.backgroundColor = "";
       if (addFormNameElement.value === "") {
         addFormNameElement.style.backgroundColor = "red";
         addFormButtonElement.ariaDisabled = true;
         addFormButtonElement.style.backgroundColor = "grey";
         return;
-      } else {
-        addFormButtonElement.style.backgroundColor = "#bcec30";
-
       }
       addFormTextElement.style.backgroundColor = "";
       if (addFormTextElement.value === "") {
@@ -184,23 +219,20 @@
           .replaceAll("QUOTE_END", "</div>"),
         like: likesCounterElement.value,
         isLike: likesButtonElement.value = false,
+
+
       });
 
       addFormNameElement.value = ""
       addFormTextElement.value = ""
       likesCounterElement.value = ""
+
+      /* */
       renderCommentsList();
+      // editComment();
     });
   }
   pullComment();
-
-  document.addEventListener("keyup", (event) => {
-    if (event.code == 'KeyEnter') {
-      pullComment();
-      renderCommentsList();
-      console.log("enter")
-    }
-  });
 
   console.log("It works!");
 </script>
