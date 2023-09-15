@@ -57,19 +57,20 @@ body {
 .comment-body {
   margin-top: 32px;
   margin-bottom: 32px;
+  font-size: 32px;
 }
 
 .comment-text {
   font-size: 32px;
 }
 
-.quote {
+/*.quote {
   background-color: white;
   font-size: 16px;
   color: #7334ea;
   padding: 10px;
   margin-bottom: 20px;
-}
+}*/
 
 .likes {
   display: flex;
@@ -137,9 +138,8 @@ body {
   border: none;
   border-radius: 18px;
   cursor: pointer;
-  & delete {
-    
-  }
+
+  & delete {}
 }
 
 .add-form-button:hover {

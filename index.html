@@ -34,13 +34,13 @@
   const addFormNameElement = document.getElementById("add-form-name");
   const commentsListElements = document.getElementById("comments");
 
-  const editCommentsButton = document.querySelectorAll(".add-form-button edit");
-  const addForm = document.querySelectorAll(".add-form");
+  const editCommentsButton = document.querySelectorAll(".add-form-button.edit");
+  const addForm = document.querySelector(".add-form");
   const commentsList = document.querySelectorAll(".comments");
   const commentElement = document.querySelectorAll(".comment");
   const likesButtonElement = document.querySelectorAll(".like-button");
   const likesCounterElement = document.querySelectorAll(".likes-counter");
-  // const commentText = document.querySelectorAll(".comment-text");
+  const boxTextComment = document.querySelectorAll(".comment-body");
 
   let currentDate = new Date();
   let date = currentDate.getDate();
@@ -63,21 +63,23 @@
   const yearForm = toString(year).split('').push([2], [3]);
   const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
 
-  const commentsListData = [{
-      name: "Глеб Фокин",
-      comment: "Это будет первый комментарий на этой странице",
-      like: 3,
-      isLike: false,
-      isEdit: false,
-    },
-    {
-      name: "Варвара Н.",
-      comment: "Мне нравится как оформлена эта страница! ❤",
-      like: 75,
-      isLike: false,
-      isEdit: false,
-    }
+  let commentsListData = [{
+    name: "Глеб Фокин",
+    comment: "Это будет первый комментарий на этой странице",
+    like: 3,
+    isLike: false,
+    isEdit: false,
+  },
+  {
+    name: "Варвара Н.",
+    comment: "Мне нравится как оформлена эта страница! ❤",
+    like: 75,
+    isLike: false,
+    isEdit: false,
+  }
   ];
+
+
 
   const initEventListener = () => {
     likesCounterElement.value = 0;
@@ -86,7 +88,7 @@
       likeButtonElement.addEventListener("click", (event) => {
         event.stopPropagation();
         const index = likeButtonElement.dataset.index;
-        const isLiked = likeButtonElement.classList.contains("-active-like");
+        // const isLiked = likeButtonElement.classList.contains("-active-like");
         if (commentsListData[index].isLike === false) {
           commentsListData[index].isLike = true;
           commentsListData[index].like++;
@@ -124,57 +126,65 @@
   }
 
   const editComment = () => {
-    const editCommentsButton = document.querySelectorAll(".add-form-button edit");
+    const editCommentsButton = document.querySelectorAll(".edit-button");
+    const commentsElement = document.querySelectorAll(".comment");
     for (const editCommentButton of editCommentsButton) {
       editCommentButton.addEventListener("click", (e) => {
         e.stopPropagation();
-        const index = commentElement.dataset.index;
+        const boxTextComment = document.querySelectorAll(".comment-body");
+        const index = boxTextComment.dataset.index;
         const addFormTextElement = document.getElementById("add-form-text");
         const addFormNameElement = document.getElementById("add-form-name");
-        addFormNameElement.value = commentsListData[index].name;
-        addFormTextElement.value = commentsListData[index].comment;
+        if (commentsListData[index].isEdit === false) {
+          commentsListData[index].isEdit = true;
+          boxTextComment[index].innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
+        aria-valuetext="">${commentsListData[index].comment}</textarea>`;
+        } else {
+          commentsListData[index].isEdit = false;
+          boxTextComment[index].innerHTML = `<div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
+            <div class="comment-text">
+              ${com[index].comment}
+            </div>`
+        }
         renderCommentsList();
       })
     }
   };
 
-  /*const addByKey = () => {
-    const addForm = document.querySelectorAll(".add-form");
-    addForm.addEventListener("keyup", (event) => {
-      if (event.code === "Enter") {
+  /*document.addEventListener("keyup", (event) => {
+    if (event.code === "keyEnter") {
+      () => {
         pullComment();
-        console.log("enter")
-      }
-      renderCommentsList();
-    })
-  };*/
+      };
+      console.log("enter")
+    }
+    renderCommentsList();
+  })*/
+
 
   const renderCommentsList = () => {
     const commentsListHTML = commentsListData.map((com, index) => {
-        return `<li class="comment" id="comment" data-index="${index}">
+      return `<li class="comment" id="comment" data-index="${index}">
           <div class="comment-header" >
             <div>${com.name}</div>
             <div>${comDate}</div>
           </div>
-          <div class="comment-body">
+          <div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
             <div class="comment-text">
               ${com.comment}
             </div>
           </div>
           <div class="comment-footer">
-            
             <div class="likes">
               <span class="likes-counter">${com.like}</span>
               <button class="${com.isLike ? 'like-button -active-like' : 'like-button'}" data-index="${index}"></button>
             </div>
-            
           </div>
-          <div class="add-form-row">
-              <div class=""></div>
-              <button class="add-form-button edit" id="edit-form-button">Редактировать</button>
-            </div
+          <div class="edit-button">
+            <button class="add-form-button -edit" id="edit-form-button">Редактировать</button>
+            <div/>
         </li>`
-      })
+    })
       .join("");
     commentsListElements.innerHTML = commentsListHTML;
     initEventListener();
@@ -204,7 +214,7 @@
         addFormButtonElement.style.backgroundColor = "grey";
         return;
       }
-      commentsListData.push({
+      /*commentsListData.push({
         name: addFormNameElement.value
           .replaceAll("<", "&lt;")
           .replaceAll(">", "&gt;")
@@ -219,20 +229,48 @@
           .replaceAll("QUOTE_END", "</div>"),
         like: likesCounterElement.value,
         isLike: likesButtonElement.value = false,
+        isEdit: boxTextComment.value = false,
 
+      });*/
 
+      fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
+        method: "POST",
+        body: JSON.stringify({
+          name: addFormNameElement.value,
+          comment: addFormTextElement.value.replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
+            .replaceAll("QUOTE_END", "</div>"),
+          like: 0,
+          isLike: false,
+          isEdit: false,
+        }),
+      }).then((response) => {
+        response.json().then((responseData) => {
+          commentsListData = responseData.todos;
+          renderCommentsList();
+        });
       });
+
+      renderCommentsList();
 
       addFormNameElement.value = ""
       addFormTextElement.value = ""
       likesCounterElement.value = ""
 
-      /* */
-      renderCommentsList();
-      editComment();
+      // editComment();
     });
   }
   pullComment();
+
+  fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
+    method: "GET",
+  }).then((response) => {
+    response.json().then((responseData) => {
+      commentsListData = responseData.todos;
+      renderCommentsList();
+      console.log(commentsListData);
+    });
+  });
+
 
   console.log("It works!");
 </script>
