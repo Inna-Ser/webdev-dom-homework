@@ -22,7 +22,8 @@ body {
 }
 
 .comment,
-.add-form {
+.add-form,
+.waiting-screen {
   width: 596px;
   box-sizing: border-box;
   background: radial-gradient(75.42% 75.42% at 50% 42.37%,
@@ -64,13 +65,13 @@ body {
   font-size: 32px;
 }
 
-/*.quote {
+.quote {
   background-color: white;
   font-size: 16px;
   color: #7334ea;
   padding: 10px;
   margin-bottom: 20px;
-}*/
+}
 
 .likes {
   display: flex;

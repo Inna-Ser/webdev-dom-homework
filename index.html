@@ -42,6 +42,23 @@
   const likesCounterElement = document.querySelectorAll(".likes-counter");
   const boxTextComment = document.querySelectorAll(".comment-body");
 
+  fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
+    method: "GET",
+  }).then((response) => {
+    response.json().then((responseData) => {
+      commentsListData = responseData.comments.map((comment) => {
+        return {
+          name: comment.author.name,
+          date: comment.date,
+          comment: comment.text,
+          like: comment.like,
+        }
+      });
+      renderCommentsList();
+    });
+  });
+
+
   let currentDate = new Date();
   let date = currentDate.getDate();
   let montch = currentDate.getMonth();
@@ -63,32 +80,35 @@
   const yearForm = toString(year).split('').push([2], [3]);
   const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
 
-  let commentsListData = [{
-    name: "Глеб Фокин",
-    comment: "Это будет первый комментарий на этой странице",
-    like: 3,
-    isLike: false,
-    isEdit: false,
-  },
-  {
-    name: "Варвара Н.",
-    comment: "Мне нравится как оформлена эта страница! ❤",
-    like: 75,
-    isLike: false,
-    isEdit: false,
-  }
+  let commentsListData = [
+    {
+      name: "Глеб Фокин",
+      comment: "Это будет первый комментарий на этой странице",
+      date: comDate,
+      like: 3,
+      isLike: false,
+      isEdit: false,
+    },
+    {
+      name: "Варвара Н.",
+      comment: "Мне нравится как оформлена эта страница! ❤",
+      date: comDate,
+      like: 75,
+      isLike: false,
+      isEdit: false,
+    }
   ];
 
 
 
   const initEventListener = () => {
+
     likesCounterElement.value = 0;
     const likesButtonElement = document.querySelectorAll(".like-button");
     for (const likeButtonElement of likesButtonElement) {
       likeButtonElement.addEventListener("click", (event) => {
         event.stopPropagation();
         const index = likeButtonElement.dataset.index;
-        // const isLiked = likeButtonElement.classList.contains("-active-like");
         if (commentsListData[index].isLike === false) {
           commentsListData[index].isLike = true;
           commentsListData[index].like++;
@@ -151,15 +171,7 @@
     }
   };
 
-  /*document.addEventListener("keyup", (event) => {
-    if (event.code === "keyEnter") {
-      () => {
-        pullComment();
-      };
-      console.log("enter")
-    }
-    renderCommentsList();
-  })*/
+
 
 
   const renderCommentsList = () => {
@@ -176,7 +188,7 @@
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">${com.like}</span>
+              <span class="likes-counter">${likesCounterElement.value}</span>
               <button class="${com.isLike ? 'like-button -active-like' : 'like-button'}" data-index="${index}"></button>
             </div>
           </div>
@@ -196,21 +208,6 @@
 
   renderCommentsList();
 
-  fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
-    method: "GET",
-  }).then((response) => {
-    response.json().then((responseData) => {
-      commentsListData = responseData.comments.map((comment) => {
-        return {
-          name: comment.author.name,
-          date: comment.Date,
-          comment: comment.text,
-          comment: comment.like,
-        }
-      });
-      renderCommentsList();
-    });
-  });
 
   const pullComment = () => {
     addFormButtonElement.addEventListener("click", () => {
@@ -230,7 +227,7 @@
         addFormButtonElement.style.backgroundColor = "grey";
         return;
       }
-      /*commentsListData.push({
+      commentsListData.push({
         name: addFormNameElement.value
           .replaceAll("<", "&lt;")
           .replaceAll(">", "&gt;")
@@ -246,29 +243,27 @@
         like: likesCounterElement.value,
         isLike: likesButtonElement.value = false,
         isEdit: boxTextComment.value = false,
-
-      });*/
-
-
-
-      fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
-        method: "POST",
-        body: JSON.stringify({
-          name: addFormNameElement.value,
-          comment: addFormTextElement.value.replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
-            .replaceAll("QUOTE_END", "</div>"),
-          like: 0,
-          isLike: false,
-          isEdit: false,
-        }),
-      }).then((response) => {
-        response.json().then((responseData) => {
-          commentsListData = responseData.todos;
-          console.log(commentsListData);
-
-          renderCommentsList();
-        });
       });
+
+      fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments',
+        {
+          method: "POST",
+          body: JSON.stringify({
+            text: addFormTextElement.value,
+            name: addFormNameElement.value,
+          }),
+        }).then((response) => {
+          console.log(response);
+          response.json()
+            .then(() => {
+              commentsListData.push({
+                name: addFormNameElement.value,
+                date: comDate,
+                comment: addFormTextElement.value,
+                like: 0,
+              })
+            });
+        });
 
       renderCommentsList();
 
@@ -279,7 +274,26 @@
       // editComment();
     });
   }
+
   pullComment();
+
+  /*const renderCommentWaitingScreen = () => {
+    const commentWaitingScreenHtml = 
+    `<div class="waiting-screen"> 
+      <img> immages</img>
+      </div>`
+  }
+  commentsListElements.innerHTML = commentWaitingScreenHtml;
+  renderCommentWaitingScreen();*/
+
+
+  addForm.addEventListener("keyup", (event) => {
+    if (event.code === "Enter") {
+      pullComment();
+    };
+    console.log(`sjhfroue`);
+  });
+
 
   console.log("It works!");
 </script>
