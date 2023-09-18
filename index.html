@@ -52,6 +52,7 @@
           date: comment.date,
           comment: comment.text,
           like: comment.like,
+          isLike: comment.isLiked,
         }
       });
       renderCommentsList();
@@ -188,7 +189,7 @@
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">${likesCounterElement.value}</span>
+              <span class="likes-counter">${com.like}</span>
               <button class="${com.isLike ? 'like-button -active-like' : 'like-button'}" data-index="${index}"></button>
             </div>
           </div>
@@ -253,7 +254,7 @@
             name: addFormNameElement.value,
           }),
         }).then((response) => {
-          console.log(response);
+          // console.log(response);
           response.json()
             .then(() => {
               commentsListData.push({
@@ -261,6 +262,7 @@
                 date: comDate,
                 comment: addFormTextElement.value,
                 like: 0,
+                isLike: false,
               })
             });
         });
