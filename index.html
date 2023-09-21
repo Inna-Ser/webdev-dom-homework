@@ -41,45 +41,59 @@
   const likesButtonElement = document.querySelectorAll(".like-button");
   const likesCounterElement = document.querySelectorAll(".likes-counter");
   const boxTextComment = document.querySelectorAll(".comment-body");
+  const dateCommentElement = document.querySelectorAll(".date");
 
-  fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
-    method: "GET",
-  }).then((response) => {
-    response.json().then((responseData) => {
-      commentsListData = responseData.comments.map((comment) => {
-        return {
-          name: comment.author.name,
-          date: comment.date,
-          comment: comment.text,
-          like: comment.likes,
-          isLike: false,
-        }
+
+  const doFetchAndRender = () => {
+    fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((responseData) => {
+        commentsListData = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            date: comment.date,
+            comment: comment.text,
+            like: comment.likes,
+            isLike: false,
+          }
+          
+        });
+        renderCommentsList();
       });
-      renderCommentsList();
-    });
-  });
+  };
 
-  let currentDate = new Date();
-  let date = currentDate.getDate();
-  let montch = currentDate.getMonth();
-  let year = currentDate.getFullYear();
-  let hours = currentDate.getHours();
-  let minute = currentDate.getMinutes();
 
-  if (date < 10) {
-    date = "0" + date;
+  doFetchAndRender();
+
+  const getCurrentDate = (currentDate) => {
+    currentDate = new Date();
+    let date = currentDate.getDate();
+    let montch = currentDate.getMonth();
+    let year = currentDate.getFullYear();
+    let hours = currentDate.getHours();
+    let minute = currentDate.getMinutes();
+
+    if (date < 10) {
+      date = "0" + date;
+    }
+    if (montch < 10) {
+      montch = "0" + montch;
+    }
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
+    const yearForm = toString(year).split('').push([2], [3]);
+    const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
   }
-  if (montch < 10) {
-    montch = "0" + montch;
-  }
-  if (hours < 10) {
-    hours = "0" + hours;
-  }
-  if (minute < 10) {
-    minute = "0" + minute;
-  }
-  const yearForm = toString(year).split('').push([2], [3]);
-  const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
+
+  getCurrentDate();
 
   let commentsListData = [
   ];
@@ -164,7 +178,7 @@
       return `<li class="comment" id="comment" data-index="${index}">
           <div class="comment-header" >
             <div>${com.name}</div>
-            <div>${comDate}</div>
+            <div class="date" date-index="${index}">${com.date}</div>
           </div>
           <div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
             <div class="comment-text">
@@ -213,23 +227,9 @@
         addFormButtonElement.style.backgroundColor = "grey";
         return;
       }
-      /*commentsListData.push({
-        name: addFormNameElement.value
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll("&", "&amp;")
-          .replaceAll('"', "&quot;"),
-        comment: addFormTextElement.value
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll("&", "&amp;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
-          .replaceAll("QUOTE_END", "</div>"),
-        like: likesCounterElement.value,
-        isLike: likesButtonElement.value = false,
-        isEdit: boxTextComment.value = false,
-      });*/
+
+      addFormButtonElement.disablet = true;
+      addFormButtonElement.textContent = "Элемент добавляется...";
 
       fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments',
         {
@@ -237,45 +237,26 @@
           body: JSON.stringify({
             text: addFormTextElement.value,
             name: addFormNameElement.value,
+            date: dateCommentElement.getCurrentDate,
           })
         })
         .then(() => {
-          fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
-            method: "GET"
-          }).then((response) => {
-            response.json()
-              .then((responseData) => {
-                commentsListData = responseData.comments.map((comment) => {
-                  return {
-                    name: comment.author.name,
-                    date: comment.date,
-                    comment: comment.text,
-                    like: comment.likes,
-                    isLike: false,
-                  }
-                })
-                renderCommentsList();
-              });
-          });
-        })
+          return doFetchAndRender()
+          addFormButtonElement.disablet = false;
+          addFormButtonElement.textContent = "Написать";
+        });
+
+
+      renderCommentsList();
 
       addFormNameElement.value = ""
       addFormTextElement.value = ""
       likesCounterElement.value = ""
-    })
+    });
   }
 
   pullComment();
-
-  /*const renderCommentWaitingScreen = () => {
-    const commentWaitingScreenHtml = 
-    `<div class="waiting-screen"> 
-      <img> immages</img>
-      </div>`
-  }
-  commentsListElements.innerHTML = commentWaitingScreenHtml;
-  renderCommentWaitingScreen();*/
-
+  renderCommentsList();
 
   addForm.addEventListener("keyup", (event) => {
     if (event.code === "Enter") {
@@ -283,7 +264,6 @@
     };
     console.log(`sjhfroue`);
   });
-
 
   console.log("It works!");
 </script>
