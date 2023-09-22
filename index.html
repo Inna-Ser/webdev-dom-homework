@@ -53,6 +53,7 @@
       })
       .then((responseData) => {
         commentsListData = responseData.comments.map((comment) => {
+          comment.date = getCurrentDate(comment.date);
           return {
             name: comment.author.name,
             date: comment.date,
@@ -60,7 +61,7 @@
             like: comment.likes,
             isLike: false,
           }
-          
+
         });
         renderCommentsList();
       });
@@ -70,7 +71,7 @@
   doFetchAndRender();
 
   const getCurrentDate = (currentDate) => {
-    currentDate = new Date();
+    currentDate = new Date(currentDate);
     let date = currentDate.getDate();
     let montch = currentDate.getMonth();
     let year = currentDate.getFullYear();
@@ -91,9 +92,8 @@
     }
     const yearForm = toString(year).split('').push([2], [3]);
     const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
+    return comDate;
   }
-
-  getCurrentDate();
 
   let commentsListData = [
   ];
@@ -237,7 +237,7 @@
           body: JSON.stringify({
             text: addFormTextElement.value,
             name: addFormNameElement.value,
-            date: dateCommentElement.getCurrentDate,
+            date: getCurrentDate(new Date()),
           })
         })
         .then(() => {
