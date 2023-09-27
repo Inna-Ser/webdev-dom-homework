@@ -43,6 +43,9 @@
   const boxTextComment = document.querySelectorAll(".comment-body");
   const dateCommentElement = document.querySelectorAll(".date");
 
+  let commentsListData = [];
+
+  commentsListElements.innerHTML = `<h3>Подождите</h3>`;
 
   const doFetchAndRender = () => {
     fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
@@ -61,12 +64,10 @@
             like: comment.likes,
             isLike: false,
           }
-
         });
         renderCommentsList();
       });
   };
-
 
   doFetchAndRender();
 
@@ -95,8 +96,7 @@
     return comDate;
   }
 
-  let commentsListData = [
-  ];
+
 
   const initEventListener = () => {
     likesCounterElement.value = 0;
@@ -228,32 +228,47 @@
         return;
       }
 
-      addFormButtonElement.disablet = true;
+      addFormButtonElement.disabled = true;
       addFormButtonElement.textContent = "Элемент добавляется...";
 
       fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments',
         {
           method: "POST",
           body: JSON.stringify({
-            text: addFormTextElement.value,
-            name: addFormNameElement.value,
+            text: addFormTextElement.value
+              .replaceAll("<", "&lt;")
+              .replaceAll(">", "&gt;")
+              .replaceAll("&", "&amp;")
+              .replaceAll('"', "&quot;")
+              .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
+              .replaceAll("QUOTE_END", "</div>"),
+            name: addFormNameElement.value
+              .replaceAll("<", "&lt;")
+              .replaceAll(">", "&gt;")
+              .replaceAll("&", "&amp;")
+              .replaceAll('"', "&quot;"),
             date: getCurrentDate(new Date()),
           })
         })
-        .then(() => {
+        .then((date) => {
+          addFormButtonElement.disabled = true;
+          addFormButtonElement.textContent = "Список загружается";
           return doFetchAndRender()
-          addFormButtonElement.disablet = false;
+          renderCommentsList();
+        })
+        .then((date) => {
+          addFormButtonElement.disabled = false;
           addFormButtonElement.textContent = "Написать";
         });
-
-
-      renderCommentsList();
 
       addFormNameElement.value = ""
       addFormTextElement.value = ""
       likesCounterElement.value = ""
     });
-  }
+
+    renderCommentsList();
+
+  };
 
   pullComment();
   renderCommentsList();
