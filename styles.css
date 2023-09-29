@@ -2,6 +2,36 @@ body {
   margin: 0;
 }
 
+.mask {
+  height: 10%;
+  width: 100%;
+  background: #202020;
+  position: fixed;
+  top: 10px;
+  z-index: 100;
+  transition: 0.3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mask-comment {
+  width: 100%;
+  background: #202020;
+  position: fixed;
+  margin-top: 10px;
+  z-index: 100;
+  transition: 0.3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  color: white;
+  font-size: 24px;
+}
+
 .container {
   font-family: Helvetica;
   color: #ffffff;

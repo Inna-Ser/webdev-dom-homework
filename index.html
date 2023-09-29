@@ -8,10 +8,16 @@
 </head>
 
 <body>
+  <div class="mask">
+    <div class="loader">Подождите, пожалуйста, комментарии загружаются</div>
+  </div>
   <div class="container">
     <ul class="comments" id="comments">
       <!-- список рендерится из JS -->
     </ul>
+    <div class="mask-comment">
+      <div class="loader-comment">Комментарий загружается...</div>
+    </div>
     <div class="add-form">
       <input type="text" class="add-form-name" id="add-form-name" placeholder="Введите ваше имя" value="" />
       <textarea type="textarea" class="add-form-text" id="add-form-text" placeholder="Введите ваш коментарий" rows="4"
@@ -42,12 +48,16 @@
   const likesCounterElement = document.querySelectorAll(".likes-counter");
   const boxTextComment = document.querySelectorAll(".comment-body");
   const dateCommentElement = document.querySelectorAll(".date");
+  const addLoader = document.querySelector(".mask");
+  const addLoaderComment = document.querySelector(".mask-comment");
 
   let commentsListData = [];
 
-  commentsListElements.innerHTML = `<h3>Подождите</h3>`;
+  addLoaderComment.style.display = 'none';
+  addLoader.style.display = 'blok';
+  document.body.style.overflow = 'hidden';
 
-  const doFetchAndRender = () => {
+  const doFetchGetCommentList = () => {
     fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
       method: "GET",
     })
@@ -66,10 +76,12 @@
           }
         });
         renderCommentsList();
+        addLoader.style.display = 'none';
+        document.body.style.overflow = 'visible';
       });
   };
 
-  doFetchAndRender();
+  doFetchGetCommentList();
 
   const getCurrentDate = (currentDate) => {
     currentDate = new Date(currentDate);
@@ -95,8 +107,6 @@
     const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
     return comDate;
   }
-
-
 
   const initEventListener = () => {
     likesCounterElement.value = 0;
@@ -207,29 +217,34 @@
     // addByKey();
   };
 
-  renderCommentsList();
+  addFormNameElement.addEventListener("input", () => {
+    console.log("I working")
+    if (addFormNameElement.value === "" || addFormTextElement.value === "") {
+      addFormButtonElement.disabled = true;
+    } else {
+      addFormButtonElement.disabled = false;
+    }
+  })
+
+  addFormTextElement.addEventListener("input", () => {
+    console.log("I working")
+    if (addFormNameElement.value === "" || addFormTextElement.value === "") {
+      addFormButtonElement.disabled = true;
+    } else {
+      addFormButtonElement.disabled = false;
+    }
+  })
 
   const pullComment = () => {
     addFormButtonElement.addEventListener("click", () => {
       const allcomments = commentsListElements.innerHTML;
       addFormButtonElement.style.backgroundColor = "#bcec30";
       addFormNameElement.style.backgroundColor = "";
-      if (addFormNameElement.value === "") {
-        addFormNameElement.style.backgroundColor = "red";
-        addFormButtonElement.ariaDisabled = true;
-        addFormButtonElement.style.backgroundColor = "grey";
-        return;
-      }
-      addFormTextElement.style.backgroundColor = "";
-      if (addFormTextElement.value === "") {
-        addFormTextElement.style.backgroundColor = "red";
-        addFormButtonElement.ariaDisabled = true;
-        addFormButtonElement.style.backgroundColor = "grey";
-        return;
-      }
 
-      addFormButtonElement.disabled = true;
-      addFormButtonElement.textContent = "Элемент добавляется...";
+      doFetchGetCommentList.disabled = true;
+
+      addLoaderComment.style.display = 'blok';
+      addForm.style.overflow = 'hidden';
 
       fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments',
         {
@@ -247,38 +262,36 @@
               .replaceAll(">", "&gt;")
               .replaceAll("&", "&amp;")
               .replaceAll('"', "&quot;"),
-            date: getCurrentDate(new Date()),
+            // date: getCurrentDate(new Date()),
           })
         })
-        .then((date) => {
-          addFormButtonElement.disabled = true;
-          addFormButtonElement.textContent = "Список загружается";
-          return doFetchAndRender()
+        .then(() => {
+          return doFetchGetCommentList()
+
+          addLoaderComment.style.display = 'none';
+          document.body.style.overflow = 'visible';
           renderCommentsList();
         })
-        .then((date) => {
-          addFormButtonElement.disabled = false;
-          addFormButtonElement.textContent = "Написать";
-        });
-
       addFormNameElement.value = ""
       addFormTextElement.value = ""
       likesCounterElement.value = ""
-    });
-
-    renderCommentsList();
-
-  };
+      renderCommentsList();
+    })
+  }
 
   pullComment();
   renderCommentsList();
+  console.log(addForm);
 
-  addForm.addEventListener("keyup", (event) => {
-    if (event.code === "Enter") {
-      pullComment();
-    };
-    console.log(`sjhfroue`);
-  });
+  const addByKey = () => {
+    addForm.addEventListener("keyup", (event) => {
+      console.log(event.code);
+      if (event.code === "Enter") {
+        doFetchPostComment();
+      };
+      console.log(`sjhfroue`);
+    });
+  }
 
   console.log("It works!");
 </script>
