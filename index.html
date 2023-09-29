@@ -54,7 +54,7 @@
   let commentsListData = [];
 
   addLoaderComment.style.display = 'none';
-  addLoader.style.display = 'blok';
+  addLoader.style.display = 'block';
   document.body.style.overflow = 'hidden';
 
   const doFetchGetCommentList = () => {
@@ -243,8 +243,9 @@
 
       doFetchGetCommentList.disabled = true;
 
-      addLoaderComment.style.display = 'blok';
-      addForm.style.overflow = 'hidden';
+      addLoaderComment.style.display = 'block';
+      addForm.style.visible = 'hidden';
+      document.body.style.overflow = 'hidden';
 
       fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments',
         {
@@ -262,12 +263,10 @@
               .replaceAll(">", "&gt;")
               .replaceAll("&", "&amp;")
               .replaceAll('"', "&quot;"),
-            // date: getCurrentDate(new Date()),
           })
         })
         .then(() => {
-          return doFetchGetCommentList()
-
+          doFetchGetCommentList()
           addLoaderComment.style.display = 'none';
           document.body.style.overflow = 'visible';
           renderCommentsList();
@@ -283,15 +282,15 @@
   renderCommentsList();
   console.log(addForm);
 
-  const addByKey = () => {
-    addForm.addEventListener("keyup", (event) => {
-      console.log(event.code);
-      if (event.code === "Enter") {
-        doFetchPostComment();
-      };
-      console.log(`sjhfroue`);
-    });
-  }
+  /* const addByKey = () => {
+     addForm.addEventListener("keyup", (event) => {
+       console.log(event.code);
+       if (event.code === "Enter") {
+         doFetchPostComment();
+       };
+       console.log(`sjhfroue`);
+     });
+   }*/
 
   console.log("It works!");
 </script>

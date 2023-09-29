@@ -6,11 +6,16 @@ body {
   height: 10%;
   width: 100%;
   background: #202020;
-  position: fixed;
-  top: 10px;
   z-index: 100;
-  transition: 0.3;
+  transition: 0.3s;
+  padding-top: 100px;
+}
+
+.loader {
+  color: white;
+  font-size: 24px;
   display: flex;
+  align-content: center;
   justify-content: center;
   align-items: center;
 }
@@ -18,8 +23,6 @@ body {
 .mask-comment {
   width: 100%;
   background: #202020;
-  position: fixed;
-  margin-top: 10px;
   z-index: 100;
   transition: 0.3;
   display: flex;
@@ -27,9 +30,12 @@ body {
   align-items: center;
 }
 
-.loader {
+.loader-comment {
   color: white;
   font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
