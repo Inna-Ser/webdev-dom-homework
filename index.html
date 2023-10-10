@@ -30,16 +30,13 @@
       <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
     </div>
   </div>
-
 </body>
-
 <script>
   "use strict";
   const addFormButtonElement = document.getElementById("add-form-button");
   const addFormTextElement = document.getElementById("add-form-text");
   const addFormNameElement = document.getElementById("add-form-name");
   const commentsListElements = document.getElementById("comments");
-
   const editCommentsButton = document.querySelectorAll(".add-form-button.edit");
   const addForm = document.querySelector(".add-form");
   const commentsList = document.querySelectorAll(".comments");
@@ -73,15 +70,45 @@
             comment: comment.text,
             like: comment.likes,
             isLike: false,
+            isLikeLoading: false,
           }
-        });
-        renderCommentsList();
-        addLoader.style.display = 'none';
-        document.body.style.overflow = 'visible';
-      });
+        })
+      })
+      .then((response) => {
+        if (response.status === 400) {
+          throw new Error('Неверный запрос')
+        }
+        if (response.status === 500) {
+          throw new Error('Ошибка сервера')
+        }
+        if (() => {
+          TypeError("offline")
+        })
+          if (response.status === 201) {
+            return response.json();
+          }
+
+      })
+      .catch((error) => {
+        console.warn(error);
+        if (error.message === "Неверный запрос") {
+          alert('Короткое имя или текст комментария, минимум 3 символа')
+        }
+        if (error.message === "Ошибка сервера") {
+          alert('Сервер не отвечает, попробуйте позже')
+        }
+        if (TypeError === "offline") {
+          alert('Проблемы с интернетом, проверьте подключение')
+        }
+      })
+
+    addLoader.style.display = 'none';
+    document.body.style.overflow = 'visible';
   };
 
   doFetchGetCommentList();
+  renderCommentsList();
+
 
   const getCurrentDate = (currentDate) => {
     currentDate = new Date(currentDate);
@@ -90,7 +117,6 @@
     let year = currentDate.getFullYear();
     let hours = currentDate.getHours();
     let minute = currentDate.getMinutes();
-
     if (date < 10) {
       date = "0" + date;
     }
@@ -116,10 +142,10 @@
     });
   }
 
-  likesButtonElement.disabled = true;
-
   const initEventListener = () => {
     likesCounterElement.value = 0;
+    commentsListData.isLikeLoading = false;
+
     const likesButtonElement = document.querySelectorAll(".like-button");
     for (const likeButtonElement of likesButtonElement) {
       likeButtonElement.addEventListener("click", (event) => {
@@ -128,50 +154,49 @@
         const index = likeButtonElement.dataset.index;
 
         delay(2000).then(() => {
-          if (commentsListData[index].isLike === false) {
-            commentsListData[index].isLike = true;
-            commentsListData[index].like++;
-          } else {
-            commentsListData[index].isLike = false;
-            commentsListData[index].like--;
-          }
-        })
+          commentsListData.likes = commentsListData.isLiked
+            ? commentsListData.likes - 1
+            : commentsListData.likes + 1;
+          commentsListData.isLiked = !commentsListData.isLiked;
+          commentsListData.isLikeLoading = false;
+          renderCommentsList()
+        });
+        if (commentsListData[index].isLike === false) {
+          commentsListData[index].isLike = true;
+          commentsListData[index].like++;
+        } else {
+          commentsListData[index].isLike = false;
+          commentsListData[index].like--;
+        }
         renderCommentsList()
       })
-    };
+    }
   }
 
   const answerCommentListener = () => {
     const commentsElement = document.querySelectorAll(".comment");
     for (const commentElement of commentsElement) {
       commentElement.addEventListener("click", () => {
-
         const index = commentElement.dataset.index;
         const addFormTextElement = document.getElementById("add-form-text");
         const boxTextComment = document.querySelectorAll(".comment-body");
-
         addFormTextElement.value =
           `QUOTE_BEGIN ${commentsListData[index].name}: 
           ${commentsListData[index].comment} QUOTE_END`;
-
         renderCommentsList();
       })
     }
   };
-
   const delLastComment = () => {
     const delCommentButton = document.getElementById("del-form-button");
     delCommentButton.addEventListener("click", () => {
       commentsListData.pop();
-
       renderCommentsList();
     });
   }
-
   const editComment = () => {
     const editCommentsButton = document.querySelectorAll(".edit-button");
     const commentsElement = document.querySelectorAll(".comment");
-
     for (const editCommentButton of editCommentsButton) {
       editCommentButton.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -194,7 +219,6 @@
       })
     }
   };
-
   const renderCommentsList = () => {
     const commentsListHTML = commentsListData.map((com, index) => {
       return `<li class="comment" id="comment" data-index="${index}">
@@ -210,7 +234,7 @@
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">${com.like}</span>
-              <button class="${com.isLike ? 'like-button -active-like' : 'like-button'}" data-index="${index}"></button>
+              <button class="${com.isLike ? 'like-button -active-like ' : 'like-button'}" data-index="${index}"></button>
             </div>
           </div>
           <div class="edit-button">
@@ -219,16 +243,13 @@
         </li>`
     })
       .join("");
-
     commentsListElements.innerHTML = commentsListHTML;
-
     initEventListener();
     answerCommentListener();
     delLastComment();
     editComment();
     // addByKey();
   };
-
   addFormNameElement.addEventListener("input", () => {
     console.log("I working")
     if (addFormNameElement.value === "" || addFormTextElement.value === "") {
@@ -237,7 +258,6 @@
       addFormButtonElement.disabled = false;
     }
   })
-
   addFormTextElement.addEventListener("input", () => {
     console.log("I working")
     if (addFormNameElement.value === "" || addFormTextElement.value === "") {
@@ -246,17 +266,16 @@
       addFormButtonElement.disabled = false;
     }
   })
-
   const pullComment = () => {
     addFormButtonElement.addEventListener("click", () => {
       const allcomments = commentsListElements.innerHTML;
       addFormButtonElement.style.backgroundColor = "#bcec30";
       addFormNameElement.style.backgroundColor = "";
-
       doFetchGetCommentList.disabled = true;
 
       addLoaderComment.style.display = 'block';
-      addForm.style.visibility = 'hidden';
+      addForm.style.visible = 'hidden';
+      document.body.style.overflow = 'hidden';
 
       fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments',
         {
@@ -276,26 +295,27 @@
               .replaceAll('"', "&quot;"),
           })
         })
-        .then(() => {
+        .then((response) => {
+          console.log(response);
           doFetchGetCommentList()
-
           addLoaderComment.style.display = 'none';
-          addForm.style.visibility = 'visible';
-
-          renderCommentsList();
+          document.body.style.overflow = 'visible';
+          addFormNameElement.value = ""
+          addFormTextElement.value = ""
+          likesCounterElement.value = ""
         })
-      addFormNameElement.value = ""
-      addFormTextElement.value = ""
-      likesCounterElement.value = ""
-
+        .catch((error) => {
+          addLoaderComment.style.display = 'none';
+          document.body.style.overflow = 'visible';
+          alert("Кажется что-то пошло не так, попробуй позже");
+          console.warn("error");
+        })
       renderCommentsList();
     })
   }
-
   pullComment();
   renderCommentsList();
   console.log(addForm);
-
   /* const addByKey = () => {
      addForm.addEventListener("keyup", (event) => {
        console.log(event.code);
@@ -305,7 +325,6 @@
        console.log(`sjhfroue`);
      });
    }*/
-
   console.log("It works!");
 </script>
 
