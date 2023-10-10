@@ -71,46 +71,23 @@
             like: comment.likes,
             isLike: false,
             isLikeLoading: false,
-          }
-        })
-      })
-      .then((response) => {
-        if (response.status === 400) {
-          throw new Error('Неверный запрос')
-        }
-        if (response.status === 500) {
-          throw new Error('Ошибка сервера')
-        }
-        if (() => {
-          TypeError("offline")
-        })
-          if (response.status === 201) {
-            return response.json();
+            forceError: false,
           }
 
-      })
-      .catch((error) => {
-        console.warn(error);
-        if (error.message === "Неверный запрос") {
-          alert('Короткое имя или текст комментария, минимум 3 символа')
-        }
-        if (error.message === "Ошибка сервера") {
-          alert('Сервер не отвечает, попробуйте позже')
-        }
-        if (TypeError === "offline") {
-          alert('Проблемы с интернетом, проверьте подключение')
-        }
+        });
+        renderCommentsList();
+        addLoaderComment.style.display = 'none';
+        addLoader.style.display = 'none';
+
+        document.body.style.overflow = 'visible';
       })
 
-    addLoader.style.display = 'none';
-    document.body.style.overflow = 'visible';
-  };
+  }
 
   doFetchGetCommentList();
-  renderCommentsList();
 
 
-  const getCurrentDate = (currentDate) => {
+  function getCurrentDate(currentDate) {
     currentDate = new Date(currentDate);
     let date = currentDate.getDate();
     let montch = currentDate.getMonth();
@@ -142,7 +119,7 @@
     });
   }
 
-  const initEventListener = () => {
+  function initEventListener() {
     likesCounterElement.value = 0;
     commentsListData.isLikeLoading = false;
 
@@ -173,7 +150,7 @@
     }
   }
 
-  const answerCommentListener = () => {
+  function answerCommentListener() {
     const commentsElement = document.querySelectorAll(".comment");
     for (const commentElement of commentsElement) {
       commentElement.addEventListener("click", () => {
@@ -187,14 +164,14 @@
       })
     }
   };
-  const delLastComment = () => {
+  function delLastComment() {
     const delCommentButton = document.getElementById("del-form-button");
     delCommentButton.addEventListener("click", () => {
       commentsListData.pop();
       renderCommentsList();
     });
   }
-  const editComment = () => {
+  function editComment() {
     const editCommentsButton = document.querySelectorAll(".edit-button");
     const commentsElement = document.querySelectorAll(".comment");
     for (const editCommentButton of editCommentsButton) {
@@ -219,7 +196,7 @@
       })
     }
   };
-  const renderCommentsList = () => {
+  function renderCommentsList() {
     const commentsListHTML = commentsListData.map((com, index) => {
       return `<li class="comment" id="comment" data-index="${index}">
           <div class="comment-header" >
@@ -304,14 +281,33 @@
           addFormTextElement.value = ""
           likesCounterElement.value = ""
         })
-        .catch((error) => {
-          addLoaderComment.style.display = 'none';
-          document.body.style.overflow = 'visible';
-          alert("Кажется что-то пошло не так, попробуй позже");
-          console.warn("error");
+        .then((response) => {
+          if (response.status === 400) {
+            throw new Error('Неверный запрос')
+          }
+          if (response.status === 500) {
+            throw new Error('Ошибка сервера')
+          }
+          if (response.status === 201) {
+            return response.json();
+          }
         })
+        .catch((error) => {
+          console.warn(error);
+          if (error.message === 400) {
+            alert('Короткое имя или текст комментария, минимум 3 символа')
+          }
+          if (error.message === 500) {
+            alert('Сервер не отвечает, попробуйте позже')
+          }
+        })
+        .catch((error) => {
+          alert('Проблема с интернетом, проверьте подключение')
+        })
+
       renderCommentsList();
-    })
+    }
+    )
   }
   pullComment();
   renderCommentsList();
