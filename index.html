@@ -76,9 +76,19 @@
         })
       })
       .then((response) => {
+        if (response.status === 500) {
+          throw new Error('Ошибка сервера')
+        }
+      })
+      .finally((response) => {
         addLoaderComment.style.display = 'none';
         addLoader.style.display = 'none';
         renderCommentsList();
+      })
+      .catch((error) => {
+        if (error.message === 'Ошибка сервера') {
+          alert('Сервер не отвечает, попробуйте позже')
+        }
       })
   }
   doFetchGetCommentList();
@@ -179,6 +189,7 @@
         const index = boxTextComment.dataset.index;
         const addFormTextElement = document.getElementById("add-form-text");
         const addFormNameElement = document.getElementById("add-form-name");
+        
         if (commentsListData[index].isEdit === false) {
           commentsListData[index].isEdit = true;
           boxTextComment[index].innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
