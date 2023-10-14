@@ -1,6 +1,8 @@
 import {
     renderCommentsList
-} from "./main.js"
+} from "./render_comment.js"
+
+const likesCounterElement = document.querySelectorAll(".likes-counter");
 
 function delay(interval = 300) {
     return new Promise((resolve) => {
@@ -9,7 +11,7 @@ function delay(interval = 300) {
         }, interval);
     });
 }
-export function initEventListener(likesCounterElement, commentsListData) {
+export function initEventListener(commentsListData) {
     likesCounterElement.value = 0;
     commentsListData.isLikeLoading = false;
 
@@ -26,7 +28,7 @@ export function initEventListener(likesCounterElement, commentsListData) {
                     commentsListData.likes + 1;
                 commentsListData.isLiked = !commentsListData.isLiked;
                 commentsListData.isLikeLoading = false;
-                renderCommentsList()
+                renderCommentsList(commentsListData)
             });
             if (commentsListData[index].isLike === false) {
                 commentsListData[index].isLike = true;
@@ -35,7 +37,7 @@ export function initEventListener(likesCounterElement, commentsListData) {
                 commentsListData[index].isLike = false;
                 commentsListData[index].like--;
             }
-            renderCommentsList()
+            renderCommentsList(commentsListData)
         })
     }
 }

@@ -1,6 +1,6 @@
 import {
     renderCommentsList
-} from "./main.js"
+} from "./render_comment.js"
 
 export function answerCommentListener() {
     const commentsElement = document.querySelectorAll(".comment");
@@ -12,7 +12,7 @@ export function answerCommentListener() {
             addFormTextElement.value =
                 `QUOTE_BEGIN ${commentsListData[index].name}: 
         ${commentsListData[index].comment} QUOTE_END`;
-            renderCommentsList();
+            renderCommentsList(commentsListData);
         })
     }
 }
@@ -21,7 +21,7 @@ export function delLastComment(commentsListData) {
     const delCommentButton = document.getElementById("del-form-button");
     delCommentButton.addEventListener("click", () => {
         commentsListData.pop();
-        renderCommentsList();
+        renderCommentsList(commentsListData);
     });
 }
 
@@ -47,7 +47,7 @@ export function editComment() {
             ${com[index].comment}
           </div>`
             }
-            renderCommentsList();
+            renderCommentsList(commentsListData);
         })
     }
 }

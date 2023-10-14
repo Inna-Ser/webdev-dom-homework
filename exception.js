@@ -1,18 +1,24 @@
-export function checkStatus500(error) {
+export function checkStatus500(response) {
     if (response.status === 500) {
         throw new Error('Ошибка сервера');
     }
 }
 
-export function checkStatus400(error) {
+export function checkStatus400(response) {
     if (response.status === 400) {
         throw new Error('Неверный запрос')
     }
 }
 
-export function checkStatus201(error) {
+export function checkStatus201(response) {
     if (response.status === 201) {
         return response.json();
+    }
+}
+
+export function checkIsInternet(response) {
+    if (response.status === undefined) {
+        throw new Error('Отсутствует соединение')
     }
 }
 
@@ -28,6 +34,8 @@ export function todoException400(error) {
     }
 }
 
-export function todoExceptionNotInternet() {
-    alert('Проблема с интернетом, проверьте подключение')
+export function todoExceptionNotInternet(error) {
+    if (error.message === 'Отсутствует соединение') {
+        alert('Проблема с интернетом, проверьте подключение')
+    }
 }

@@ -1,6 +1,9 @@
 "use strict";
 
 import {
+    renderCommentsList
+} from "./render_comment.js"
+import {
     getTodos,
     postTodo
 } from "./api.js";
@@ -8,22 +11,18 @@ import {
     getCurrentDate
 } from "./service_date.js";
 import {
-    answerCommentListener,
-    delLastComment,
-    editComment
-} from "./service_comment.js";
-import {
-    initEventListener
-} from "./service_likes.js";
-import {
     checkStatus500,
-    todoException500
+    checkStatus400,
+    checkStatus201,
+    checkIsInternet,
+    todoException500,
+    todoException400,
+    todoExceptionNotInternet
 } from "./exception.js";
 
 const addFormButtonElement = document.getElementById("add-form-button");
 const addFormTextElement = document.getElementById("add-form-text");
 const addFormNameElement = document.getElementById("add-form-name");
-const commentsListElements = document.getElementById("comments");
 const likesCounterElement = document.querySelectorAll(".likes-counter");
 const addLoader = document.querySelector(".mask");
 const addLoaderComment = document.querySelector(".mask-comment");
@@ -48,52 +47,20 @@ const doFetchGetCommentList = () => {
                 }
             })
         })
-        .then(() => {
-            checkStatus500(error);
+        .then((response) => {
+            checkStatus500(response);
         })
-        .finally((response) => {
+        .finally(() => {
             addLoaderComment.style.display = 'none';
             addLoader.style.display = 'none';
-            renderCommentsList();
+            renderCommentsList(commentsListData);
         })
-        .catch(() => {
+        .catch((error) => {
             todoException500(error);
         })
 }
 
 doFetchGetCommentList();
-
-export function renderCommentsList() {
-    const commentsListHTML = commentsListData.map((com, index) => {
-            return `<li class="comment" id="comment" data-index="${index}">
-        <div class="comment-header" >
-          <div>${com.name}</div>
-          <div class="date" date-index="${index}">${com.date}</div>
-        </div>
-        <div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
-          <div class="comment-text">
-            ${com.comment}
-          </div>
-        </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">${com.like}</span>
-            <button class="${com.isLike ? 'like-button -active-like ' : 'like-button'}" data-index="${index}"></button>
-          </div>
-        </div>
-        <div class="edit-button">
-          <button class="add-form-button -edit" id="edit-form-button">Редактировать</button>
-          <div/>
-      </li>`
-        })
-        .join("");
-    commentsListElements.innerHTML = commentsListHTML;
-    initEventListener(likesCounterElement, commentsListData);
-    answerCommentListener();
-    delLastComment(commentsListData);
-    editComment();
-    // addByKey();
-};
 
 const pullComment = () => {
     addFormTextElement.addEventListener("input", () => {
@@ -113,15 +80,10 @@ const pullComment = () => {
         const doFetchPostComment = () => {
             postTodo(addFormTextElement, addFormNameElement)
                 .then((response) => {
-                    if (response.status === 400) {
-                        throw new Error('Неверный запрос')
-                    }
-                    if (response.status === 500) {
-                        throw new Error('Ошибка сервера');
-                    }
-                    if (response.status === 201) {
-                        return response.json();
-                    }
+                    checkStatus400(response)
+                    checkStatus500(response)
+                    checkStatus201(response)
+                    checkIsInternet(response)
                 })
                 .then((response) => {
                     doFetchGetCommentList()
@@ -130,20 +92,15 @@ const pullComment = () => {
                     likesCounterElement.value = ""
                 })
                 .catch((error) => {
-                    if (error.message === 'Неверный запрос') {
-                        alert('Короткое имя или текст комментария, минимум 3 символа')
-                    }
-                    if (error.message === 'Неверный запрос') {
-                        alert('Короткое имя или текст комментария, минимум 3 символа')
-                    } else {
-                        alert('Проблема с интернетом, проверьте подключение')
-                    }
+                    todoException400(error)
+                    todoException500(error)
+                    todoExceptionNotInternet(error)
                 })
                 .finally(() => {
                     addLoaderComment.style.display = 'none';
                 })
                 .then(() => {
-                    renderCommentsList();
+                    renderCommentsList(commentsListData);
                 })
         }
         doFetchPostComment();
@@ -151,6 +108,6 @@ const pullComment = () => {
 }
 
 pullComment();
-renderCommentsList();
+renderCommentsList(commentsListData);
 
 console.log("It works!");
