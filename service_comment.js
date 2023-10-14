@@ -2,30 +2,20 @@ import {
     renderCommentsList
 } from "./render_comment.js"
 
+import {
+    addAnswerComment,
+    deletLastComment
+} from "./listeners.js"
+
 export function answerCommentListener() {
-    const commentsElement = document.querySelectorAll(".comment");
-    for (const commentElement of commentsElement) {
-        commentElement.addEventListener("click", () => {
-            const index = commentElement.dataset.index;
-            const addFormTextElement = document.getElementById("add-form-text");
-            const boxTextComment = document.querySelectorAll(".comment-body");
-            addFormTextElement.value =
-                `QUOTE_BEGIN ${commentsListData[index].name}: 
-        ${commentsListData[index].comment} QUOTE_END`;
-            renderCommentsList(commentsListData);
-        })
-    }
+    addAnswerComment()
 }
 
-export function delLastComment(commentsListData) {
-    const delCommentButton = document.getElementById("del-form-button");
-    delCommentButton.addEventListener("click", () => {
-        commentsListData.pop();
-        renderCommentsList(commentsListData);
-    });
+export function delLastComment() {
+    deletLastComment()
 }
 
-export function editComment() {
+export function editComment() { /*этот метод не работает, пока не могу разобраться*/
     const editCommentsButton = document.querySelectorAll(".edit-button");
     const commentsElement = document.querySelectorAll(".comment");
     for (const editCommentButton of editCommentsButton) {

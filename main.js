@@ -3,13 +3,16 @@
 import {
     renderCommentsList
 } from "./render_comment.js"
+
 import {
     getTodos,
     postTodo
 } from "./api.js";
+
 import {
     getCurrentDate
 } from "./service_date.js";
+
 import {
     checkStatus500,
     checkStatus400,
@@ -17,17 +20,22 @@ import {
     checkIsInternet,
     todoException500,
     todoException400,
-    todoExceptionNotInternet
-} from "./exception.js";
+    todoExceptionNotInternet,
+    checkStatus401
+} from "./exceptions.js";
 
-const addFormButtonElement = document.getElementById("add-form-button");
+import {
+    addComment
+} from "./listeners.js";
+
+export const addFormButtonElement = document.getElementById("add-form-button");
 const addFormTextElement = document.getElementById("add-form-text");
-const addFormNameElement = document.getElementById("add-form-name");
+export const addFormNameElement = document.getElementById("add-form-name");
 const likesCounterElement = document.querySelectorAll(".likes-counter");
 const addLoader = document.querySelector(".mask");
 const addLoaderComment = document.querySelector(".mask-comment");
 
-let commentsListData = [];
+export let commentsListData = [];
 
 addLoaderComment.style.display = 'none';
 addLoader.style.display = 'block';
@@ -43,12 +51,13 @@ const doFetchGetCommentList = () => {
                     like: comment.likes,
                     isLike: false,
                     isLikeLoading: false,
-                    forceError: false,
+                    forceError: true,
                 }
             })
         })
         .then((response) => {
             checkStatus500(response);
+            checkStatus401(response);
         })
         .finally(() => {
             addLoaderComment.style.display = 'none';
@@ -63,13 +72,7 @@ const doFetchGetCommentList = () => {
 doFetchGetCommentList();
 
 const pullComment = () => {
-    addFormTextElement.addEventListener("input", () => {
-        if (addFormNameElement.value === "" || addFormTextElement.value === "") {
-            addFormButtonElement.disabled = true;
-        } else {
-            addFormButtonElement.disabled = false;
-        }
-    })
+    addComment();
     addFormButtonElement.addEventListener("click", () => {
         addFormButtonElement.style.backgroundColor = "#bcec30";
         addFormNameElement.style.backgroundColor = "";
@@ -83,9 +86,10 @@ const pullComment = () => {
                     checkStatus400(response)
                     checkStatus500(response)
                     checkStatus201(response)
+                    checkStatus401(response)
                     checkIsInternet(response)
                 })
-                .then((response) => {
+                .then(() => {
                     doFetchGetCommentList()
                     addFormNameElement.value = ""
                     addFormTextElement.value = ""

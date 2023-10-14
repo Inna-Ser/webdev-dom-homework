@@ -1,3 +1,7 @@
+import {
+    password
+} from "./api.js"
+
 export function checkStatus500(response) {
     if (response.status === 500) {
         throw new Error('Ошибка сервера');
@@ -16,8 +20,14 @@ export function checkStatus201(response) {
     }
 }
 
+export function checkStatus401(response) {
+    if (response.status === 401) {
+        password = prompt('Введите верный пароль')
+    }
+}
+
 export function checkIsInternet(response) {
-    if (response.status === undefined) {
+    if (!response.status === 201 || !response.status === 400 || !response.status === 500) {
         throw new Error('Отсутствует соединение')
     }
 }

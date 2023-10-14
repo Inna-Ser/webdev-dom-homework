@@ -10,7 +10,6 @@ import {
 
 const commentsListElements = document.getElementById("comments");
 
-
 export function renderCommentsList(commentsListData) {
     const commentsListHTML = commentsListData.map((com, index) => {
             return `<li class="comment" id="comment" data-index="${index}">
