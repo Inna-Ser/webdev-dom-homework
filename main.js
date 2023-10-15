@@ -25,7 +25,8 @@ import {
 } from "./exceptions.js";
 
 import {
-    addComment
+    addTextComment,
+    addNameComment
 } from "./listeners.js";
 
 export const addFormButtonElement = document.getElementById("add-form-button");
@@ -71,8 +72,11 @@ const doFetchGetCommentList = () => {
 
 doFetchGetCommentList();
 
+addTextComment();
+
+addNameComment();
+
 const pullComment = () => {
-    addComment();
     addFormButtonElement.addEventListener("click", () => {
         addFormButtonElement.style.backgroundColor = "#bcec30";
         addFormNameElement.style.backgroundColor = "";
@@ -87,7 +91,7 @@ const pullComment = () => {
                     checkStatus500(response)
                     checkStatus201(response)
                     checkStatus401(response)
-                    checkIsInternet(response)
+
                 })
                 .then(() => {
                     doFetchGetCommentList()
@@ -98,7 +102,6 @@ const pullComment = () => {
                 .catch((error) => {
                     todoException400(error)
                     todoException500(error)
-                    todoExceptionNotInternet(error)
                 })
                 .finally(() => {
                     addLoaderComment.style.display = 'none';

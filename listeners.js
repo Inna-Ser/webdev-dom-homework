@@ -11,8 +11,18 @@ import {
 const delCommentButton = document.getElementById("del-form-button");
 const addFormTextElement = document.getElementById("add-form-text");
 
-export function addComment() {
+export function addTextComment() {
     addFormTextElement.addEventListener("input", () => {
+        if (addFormNameElement.value === "" || addFormTextElement.value === "") {
+            addFormButtonElement.disabled = true;
+        } else {
+            addFormButtonElement.disabled = false;
+        }
+    })
+}
+
+export function addNameComment() {
+    addFormNameElement.addEventListener("input", () => {
         if (addFormNameElement.value === "" || addFormTextElement.value === "") {
             addFormButtonElement.disabled = true;
         } else {

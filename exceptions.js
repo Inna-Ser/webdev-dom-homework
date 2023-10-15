@@ -1,5 +1,6 @@
 import {
-    password
+    password,
+    getTodos
 } from "./api.js"
 
 export function checkStatus500(response) {
@@ -22,13 +23,16 @@ export function checkStatus201(response) {
 
 export function checkStatus401(response) {
     if (response.status === 401) {
-        password = prompt('Введите верный пароль')
+        password = prompt('Введите верный пароль');
+        getTodos();
+        throw new Error('Нет авторизации');
     }
+    return response.json();
 }
 
-export function checkIsInternet(response) {
-    if (!response.status === 201 || !response.status === 400 || !response.status === 500) {
-        throw new Error('Отсутствует соединение')
+export function checkIsInternet() {
+    if (!navigator.onLine) {
+        alert('Проблема с интернетом, проверьте подключение')
     }
 }
 
