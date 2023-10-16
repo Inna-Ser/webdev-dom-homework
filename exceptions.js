@@ -1,5 +1,5 @@
 import {
-    password,
+    // password,
     getTodos
 } from "./api.js"
 
@@ -21,6 +21,12 @@ export function checkStatus201(response) {
     }
 }
 
+export function checkIsInternet(window) {
+    if (window.navigator.onLine === false) {
+        alert('Проблема с интернетом, проверьте подключение')
+    }
+}
+
 export function checkStatus401(response) {
     if (response.status === 401) {
         password = prompt('Введите верный пароль');
@@ -28,12 +34,6 @@ export function checkStatus401(response) {
         throw new Error('Нет авторизации');
     }
     return response.json();
-}
-
-export function checkIsInternet() {
-    if (!navigator.onLine) {
-        alert('Проблема с интернетом, проверьте подключение')
-    }
 }
 
 export function todoException500(error) {
@@ -45,11 +45,5 @@ export function todoException500(error) {
 export function todoException400(error) {
     if (error.message === 'Неверный запрос') {
         alert('Короткое имя или текст комментария, минимум 3 символа')
-    }
-}
-
-export function todoExceptionNotInternet(error) {
-    if (error.message === 'Отсутствует соединение') {
-        alert('Проблема с интернетом, проверьте подключение')
     }
 }

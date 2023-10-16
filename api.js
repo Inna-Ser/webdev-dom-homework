@@ -1,28 +1,18 @@
-import {
-    checkStatus401,
-    checkIsInternet
-} from "./exceptions.js";
+// export let password = prompt("Ввести пароль");
 
-export let password = prompt("Ввести пароль");
-
-const host = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments";
+// const host = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments";
 
 export function getTodos() {
-    checkIsInternet()
-    return fetch(host, {
+    return fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
             method: "GET",
-            headers: {
-                Authorization: password,
-            },
+            // headers: {
+            //     Authorization: password,
+            // },
         })
-        // .then((response) => {
-        //     checkStatus401(response);
-        // })
         .then((response) => {
             return response.json()
         });
 }
-
 
 export function postTodo(addFormTextElement, addFormNameElement) {
     return fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
@@ -42,6 +32,5 @@ export function postTodo(addFormTextElement, addFormNameElement) {
                 .replaceAll('"', "&quot;"),
             forceError: false
         })
-
     })
 }

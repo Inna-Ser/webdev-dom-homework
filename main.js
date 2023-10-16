@@ -17,11 +17,9 @@ import {
     checkStatus500,
     checkStatus400,
     checkStatus201,
-    checkIsInternet,
     todoException500,
     todoException400,
-    todoExceptionNotInternet,
-    checkStatus401
+    checkIsInternet
 } from "./exceptions.js";
 
 import {
@@ -58,7 +56,7 @@ const doFetchGetCommentList = () => {
         })
         .then((response) => {
             checkStatus500(response);
-            checkStatus401(response);
+            // checkStatus401(response);
         })
         .finally(() => {
             addLoaderComment.style.display = 'none';
@@ -90,7 +88,7 @@ const pullComment = () => {
                     checkStatus400(response)
                     checkStatus500(response)
                     checkStatus201(response)
-                    checkStatus401(response)
+                    // checkStatus401(response)
 
                 })
                 .then(() => {
@@ -102,6 +100,7 @@ const pullComment = () => {
                 .catch((error) => {
                     todoException400(error)
                     todoException500(error)
+                    checkIsInternet(window)
                 })
                 .finally(() => {
                     addLoaderComment.style.display = 'none';
