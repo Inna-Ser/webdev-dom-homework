@@ -27,12 +27,14 @@ import {
     addNameComment
 } from "./listeners.js";
 
-export const addFormButtonElement = document.getElementById("add-form-button");
-const addFormTextElement = document.getElementById("add-form-text");
+import {
+    renderLogin
+} from "./loginPage.js";
+
 export const addFormNameElement = document.getElementById("add-form-name");
-const likesCounterElement = document.querySelectorAll(".likes-counter");
+export const addFormButtonElement = document.getElementById("add-form-button");
 const addLoader = document.querySelector(".mask");
-const addLoaderComment = document.querySelector(".mask-comment");
+
 
 export let commentsListData = [];
 
@@ -68,52 +70,13 @@ const doFetchGetCommentList = () => {
         })
 }
 
-doFetchGetCommentList();
+// doFetchGetCommentList();
+renderLogin({doFetchGetCommentList});
 
 addTextComment();
 
 addNameComment();
 
-const pullComment = () => {
-    addFormButtonElement.addEventListener("click", () => {
-        addFormButtonElement.style.backgroundColor = "#bcec30";
-        addFormNameElement.style.backgroundColor = "";
-        doFetchGetCommentList.disabled = true;
 
-        addLoaderComment.style.display = 'block';
-
-        const doFetchPostComment = () => {
-            postTodo(addFormTextElement, addFormNameElement)
-                .then((response) => {
-                    checkStatus400(response)
-                    checkStatus500(response)
-                    checkStatus201(response)
-                    // checkStatus401(response)
-
-                })
-                .then(() => {
-                    doFetchGetCommentList()
-                    addFormNameElement.value = ""
-                    addFormTextElement.value = ""
-                    likesCounterElement.value = ""
-                })
-                .catch((error) => {
-                    todoException400(error)
-                    todoException500(error)
-                    checkIsInternet(window)
-                })
-                .finally(() => {
-                    addLoaderComment.style.display = 'none';
-                })
-                .then(() => {
-                    renderCommentsList(commentsListData);
-                })
-        }
-        doFetchPostComment();
-    })
-}
-
-pullComment();
-renderCommentsList(commentsListData);
 
 console.log("It works!");

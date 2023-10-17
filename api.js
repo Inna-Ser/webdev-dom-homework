@@ -13,7 +13,7 @@ const userURL = "https://wedev-api.sky.pro/api/user";
 
 
 export function getTodos() {
-    return fetch(host, {
+    return fetch(todosURL, {
             method: "GET",
             headers: {
                 Authorization: token,
@@ -22,9 +22,9 @@ export function getTodos() {
         .then((response) => {
             checkStatus401(response)
         })
-        .then((response) => {
-            return response.json()
-        });
+        // .then((response) => {
+        //     return response.json()
+        // });
 }
 
 export function postTodo(addFormTextElement, addFormNameElement) {
