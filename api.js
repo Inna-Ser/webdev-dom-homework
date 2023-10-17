@@ -1,13 +1,26 @@
-// export let password = prompt("Ввести пароль");
+import {
+    checkStatus401
+} from "./exceptions.js";
 
-// const host = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments";
+export let token;
+
+export const setToken = (newToken) => {
+    token = newToken;
+};
+
+const todosURL = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments";
+const userURL = "https://wedev-api.sky.pro/api/user";
+
 
 export function getTodos() {
-    return fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
+    return fetch(host, {
             method: "GET",
-            // headers: {
-            //     Authorization: password,
-            // },
+            headers: {
+                Authorization: token,
+            },
+        })
+        .then((response) => {
+            checkStatus401(response)
         })
         .then((response) => {
             return response.json()
@@ -15,8 +28,11 @@ export function getTodos() {
 }
 
 export function postTodo(addFormTextElement, addFormNameElement) {
-    return fetch('https://wedev-api.sky.pro/api/v1/inna-serebriakova/comments', {
+    return fetch(todosURL, {
         method: "POST",
+        headers: {
+            Authorization: token,
+        },
         body: JSON.stringify({
             text: addFormTextElement.value
                 .replaceAll("<", "&lt;")
@@ -31,6 +47,16 @@ export function postTodo(addFormTextElement, addFormNameElement) {
                 .replaceAll("&", "&amp;")
                 .replaceAll('"', "&quot;"),
             forceError: false
+        })
+    })
+}
+
+export function login(login, password) {
+    return fetch(userURL, {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            password
         })
     })
 }
