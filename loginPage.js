@@ -1,10 +1,20 @@
 import {
     login,
-    token,
     setToken
 } from "./api.js";
 
-export const renderLogin = ({doFetchGetCommentList}) => {
+import {
+    doFetchGetCommentList
+} from "./main.js";
+
+const buttonElement = document.getElementById("login-button");
+const loginInputElement = document.getElementById("login-input");
+const passwordInputElement = document.getElementById("password-input");
+
+export const renderLogin = ({
+    doFetchGetCommentList
+}) => {
+
     const appElement = document.getElementById('app');
     const loginHtml =
         `<h1>Страница входа</h1>
@@ -21,12 +31,12 @@ export const renderLogin = ({doFetchGetCommentList}) => {
     appElement.innerHTML = loginHtml;
 };
 
-const buttonElement = document.getElementById("login-button");
-const loginInputElement = document.getElementById("login-input");
-const passwordInputElement = document.getElementById("password-input");
+renderLogin({
+    doFetchGetCommentList
+});
 
 buttonElement.addEventListener("click", () => {
-    login({
+    renderLogin({
         login: loginInputElement.value,
         password: passwordInputElement.value,
     }).then((responseData) => {

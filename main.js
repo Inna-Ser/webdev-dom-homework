@@ -41,7 +41,7 @@ export let commentsListData = [];
 addLoaderComment.style.display = 'none';
 addLoader.style.display = 'block';
 
-const doFetchGetCommentList = () => {
+export const doFetchGetCommentList = () => {
     getTodos().then((responseData) => {
             commentsListData = responseData.comments.map((comment) => {
                 comment.date = getCurrentDate(comment.date);
@@ -71,7 +71,9 @@ const doFetchGetCommentList = () => {
 }
 
 // doFetchGetCommentList();
-renderLogin({doFetchGetCommentList});
+renderLogin({
+    doFetchGetCommentList
+});
 
 addTextComment();
 
