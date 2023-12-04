@@ -67,7 +67,6 @@ body {
   padding-top: 20px;
   padding-bottom: 200px;
   background: #202020;
-  min-height: 100vh;
 }
 
 .comments,
@@ -139,7 +138,7 @@ body {
 
 .likes {
   display: flex;
-  align-items: center;
+  align-items: end;
 }
 
 .like-button {
@@ -212,4 +211,9 @@ body {
 
 .add-form-button:hover {
   opacity: 0.9;
+}
+
+.login-alert {
+  font-size: 24px;
+  margin-top: 20px;
 }

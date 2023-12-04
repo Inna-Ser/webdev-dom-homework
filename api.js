@@ -20,9 +20,11 @@ export function getTodos() {
             },
         })
         .then((response) => {
-            checkStatus401(response)
+            console.log(response);
+            return checkStatus401(response)
         })
         // .then((response) => {
+        //     console.log(response);
         //     return response.json()
         // });
 }

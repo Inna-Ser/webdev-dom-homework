@@ -7,14 +7,12 @@ import {
     doFetchGetCommentList
 } from "./main.js";
 
-const buttonElement = document.getElementById("login-button");
-const loginInputElement = document.getElementById("login-input");
-const passwordInputElement = document.getElementById("password-input");
+
 
 export const renderLogin = ({
     doFetchGetCommentList
 }) => {
-
+    
     const appElement = document.getElementById('app');
     const loginHtml =
         `<h1>Страница входа</h1>
@@ -29,19 +27,23 @@ export const renderLogin = ({
         <a href="index.html" id="link-to-comments">Перейти не страницу комментариев</a>
     </div>`;
     appElement.innerHTML = loginHtml;
+    const buttonElement = document.getElementById("login-button");
+    const loginInputElement = document.getElementById("login-input");
+    const passwordInputElement = document.getElementById("password-input");
+    buttonElement.addEventListener("click", () => {
+        renderLogin({
+            login: loginInputElement.value,
+            password: passwordInputElement.value,
+        }).then((responseData) => {
+            setToken(responseData.user.token);
+        }).then(() => {
+            doFetchGetCommentList()
+        })
+    });
 };
 
-renderLogin({
-    doFetchGetCommentList
-});
+// renderLogin({
+//     doFetchGetCommentList
+// });
 
-buttonElement.addEventListener("click", () => {
-    renderLogin({
-        login: loginInputElement.value,
-        password: passwordInputElement.value,
-    }).then((responseData) => {
-        setToken(responseData.user.token);
-    }).then(() => {
-        doFetchGetCommentList()
-    })
-});
+

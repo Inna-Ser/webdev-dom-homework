@@ -24,7 +24,8 @@ import {
 
 import {
     addTextComment,
-    addNameComment
+    addNameComment,
+    pullComment
 } from "./listeners.js";
 
 import {
@@ -33,15 +34,21 @@ import {
 
 export const addFormNameElement = document.getElementById("add-form-name");
 export const addFormButtonElement = document.getElementById("add-form-button");
+const addFormTextElement = document.getElementById("add-form-text");
+
 const addLoader = document.querySelector(".mask");
+export const addLoaderComment = document.querySelector(".mask-comment");
+
 
 
 export let commentsListData = [];
 
-addLoaderComment.style.display = 'none';
-addLoader.style.display = 'block';
+// addLoaderComment.style.display = 'none';
+// addLoader.style.display = 'block';
 
 export const doFetchGetCommentList = () => {
+    const appHtml = document.getElementById("app");
+    appHtml.innerHTML = "Подождите, пожалуйста, комментарии загружаются";
     getTodos().then((responseData) => {
             commentsListData = responseData.comments.map((comment) => {
                 comment.date = getCurrentDate(comment.date);
@@ -55,29 +62,59 @@ export const doFetchGetCommentList = () => {
                     forceError: true,
                 }
             })
+
         })
+        .then(() => {
+            renderCommentsList(commentsListData);
+        })
+    // .finally(() => {
+    //     // addLoaderComment.style.display = 'none';
+    //     // addLoader.style.display = 'none';
+    //     console.log(commentsListData);
+    //     renderCommentsList(commentsListData);
+    // })
+    // .catch((error) => {
+    //     todoException500(error);
+    // })
+}
+
+
+doFetchGetCommentList();
+// renderLogin({
+//     doFetchGetCommentList
+// });
+
+export const doFetchPostComment = () => {
+    postTodo(addFormTextElement, addFormNameElement)
         .then((response) => {
-            checkStatus500(response);
-            // checkStatus401(response);
+            checkStatus400(response)
+            checkStatus500(response)
+            checkStatus201(response)
+            // checkStatus401(response)
+
+        })
+        .then(() => {
+            doFetchGetCommentList()
+            addFormNameElement.value = ""
+            addFormTextElement.value = ""
+            likesCounterElement.value = ""
+        })
+        .catch((error) => {
+            todoException400(error)
+            todoException500(error)
+            checkIsInternet(window)
         })
         .finally(() => {
             addLoaderComment.style.display = 'none';
-            addLoader.style.display = 'none';
-            renderCommentsList(commentsListData);
         })
-        .catch((error) => {
-            todoException500(error);
+        .then(() => {
+            renderCommentsList(commentsListData);
         })
 }
 
-// doFetchGetCommentList();
-renderLogin({
-    doFetchGetCommentList
-});
 
-addTextComment();
 
-addNameComment();
+
 
 
 

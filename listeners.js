@@ -2,6 +2,9 @@ import {
     commentsListData,
     addFormButtonElement,
     addFormNameElement,
+    doFetchPostComment,
+    doFetchGetCommentList,
+    addLoaderComment
 } from "./main.js";
 
 import {
@@ -9,9 +12,11 @@ import {
 } from "./render_comment.js";
 
 const delCommentButton = document.getElementById("del-form-button");
-const addFormTextElement = document.getElementById("add-form-text");
+// const addFormTextElement = document.getElementById("add-form-text");
 
 export function addTextComment() {
+    const addFormTextElement = document.getElementById("add-form-text");
+
     addFormTextElement.addEventListener("input", () => {
         if (addFormNameElement.value === "" || addFormTextElement.value === "") {
             addFormButtonElement.disabled = true;
@@ -22,6 +27,8 @@ export function addTextComment() {
 }
 
 export function addNameComment() {
+    const addFormNameElement = document.getElementById("add-form-name");
+
     addFormNameElement.addEventListener("input", () => {
         if (addFormNameElement.value === "" || addFormTextElement.value === "") {
             addFormButtonElement.disabled = true;
@@ -29,6 +36,21 @@ export function addNameComment() {
             addFormButtonElement.disabled = false;
         }
     })
+}
+
+export function pullComment() {
+    const addFormButtonElement = document.getElementById("add-form-button");
+    const addFormNameElement = document.getElementById("add-form-name");
+    addFormButtonElement.addEventListener("click", () => {
+        addFormButtonElement.style.backgroundColor = "#bcec30";
+        addFormNameElement.style.backgroundColor = "";
+        doFetchGetCommentList.disabled = true;
+
+        // addLoaderComment.style.display = 'block';
+
+        doFetchPostComment();
+    })
+    // renderCommentsList(commentsListData);
 }
 
 export function addAnswerComment() {
@@ -42,8 +64,9 @@ export function addAnswerComment() {
             renderCommentsList(commentsListData);
         })
     }
+    addFormTextElement.value = ""
+
 }
-addFormTextElement.value = ""
 
 export function deletLastComment() {
     delCommentButton.addEventListener("click", () => {
