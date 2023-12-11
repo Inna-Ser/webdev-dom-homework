@@ -9,10 +9,8 @@ import {
 
 
 
-export const renderLogin = ({
-    doFetchGetCommentList
-}) => {
-    
+export const renderLogin = () => {
+
     const appElement = document.getElementById('app');
     const loginHtml =
         `<h1>Страница входа</h1>
@@ -31,11 +29,9 @@ export const renderLogin = ({
     const loginInputElement = document.getElementById("login-input");
     const passwordInputElement = document.getElementById("password-input");
     buttonElement.addEventListener("click", () => {
-        renderLogin({
+        login({
             login: loginInputElement.value,
             password: passwordInputElement.value,
-        }).then((responseData) => {
-            setToken(responseData.user.token);
         }).then(() => {
             doFetchGetCommentList()
         })
@@ -45,5 +41,3 @@ export const renderLogin = ({
 // renderLogin({
 //     doFetchGetCommentList
 // });
-
-

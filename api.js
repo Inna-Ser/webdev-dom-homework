@@ -1,15 +1,18 @@
 import {
     checkStatus401
 } from "./exceptions.js";
+import {
+    setUser
+} from "./main.js";
 
 export let token;
-
 export const setToken = (newToken) => {
-    token = newToken;
+    token = `Bearer ${newToken}`;
 };
 
 const todosURL = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments";
-const userURL = "https://wedev-api.sky.pro/api/user";
+const userURL = "https://wedev-api.sky.pro/api/user/login";
+const todoURL = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comment";
 
 
 export function getTodos() {
@@ -23,10 +26,10 @@ export function getTodos() {
             console.log(response);
             return checkStatus401(response)
         })
-        // .then((response) => {
-        //     console.log(response);
-        //     return response.json()
-        // });
+    // .then((response) => {
+    //     console.log(response);
+    //     return response.json()
+    // });
 }
 
 export function postTodo(addFormTextElement, addFormNameElement) {
@@ -53,12 +56,21 @@ export function postTodo(addFormTextElement, addFormNameElement) {
     })
 }
 
-export function login(login, password) {
+export function login({
+    login,
+    password
+}) {
     return fetch(userURL, {
-        method: "POST",
-        body: JSON.stringify({
-            login,
-            password
+            method: "POST",
+            body: JSON.stringify({
+                login,
+                password
+            })
         })
-    })
+        .then((response) => {
+            return response.json();
+        }).then((response) => {
+            setUser(response.user);
+            setToken(response.user.token);
+        })
 }

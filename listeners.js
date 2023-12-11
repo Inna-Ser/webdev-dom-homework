@@ -1,4 +1,7 @@
 import {
+    postTodo
+} from "./api.js";
+import {
     commentsListData,
     addFormButtonElement,
     addFormNameElement,
@@ -41,10 +44,12 @@ export function addNameComment() {
 export function pullComment() {
     const addFormButtonElement = document.getElementById("add-form-button");
     const addFormNameElement = document.getElementById("add-form-name");
+    const addFormTextElement = document.getElementById("add-form-text")
     addFormButtonElement.addEventListener("click", () => {
-        addFormButtonElement.style.backgroundColor = "#bcec30";
+        postTodo(addFormTextElement.value, addFormNameElement.value)
+        addFormTextElement.style.backgroundColor = "#bcec30";
         addFormNameElement.style.backgroundColor = "";
-        doFetchGetCommentList.disabled = true;
+        // doFetchGetCommentList.disabled = true;
 
         // addLoaderComment.style.display = 'block';
 

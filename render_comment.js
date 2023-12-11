@@ -14,11 +14,15 @@ import {
 
 import {
   addFormButtonElement,
-  doFetchPostComment
+  doFetchPostComment,
+  user
 } from "./main.js"
 import {
   pullComment
 } from "./listeners.js";
+import {
+  renderLogin
+} from "./loginPage.js";
 
 const commentsListElements = document.getElementById("comments");
 
@@ -54,18 +58,12 @@ export function renderCommentsList(commentsListData) {
     .join("");
 
   const appHtml =
-    `<div class="mask">
-        <div class="loader">Подождите, пожалуйста, комментарии загружаются</div>
-      </div>
-      <div class="container">
+    `<div class="container">
         <ul class="comments" id="comments">
           ${commentsListHTML}
         </ul>
-        <div class="mask-comment">
-          <div class="loader-comment">Комментарий загружается...</div>
-        </div>
-        <div class="add-form">
-          <input type="text" class="add-form-name" id="add-form-name" placeholder="Введите ваше имя" value="" />
+        ${user ? `<div class="add-form">
+          <input type="text" class="add-form-name" id="add-form-name" placeholder="Введите ваше имя" disabled value="${user?.name}" />
           <textarea type="textarea" class="add-form-text" id="add-form-text" placeholder="Введите ваш коментарий" rows="4"
             aria-valuetext=""></textarea>
           <div class="add-form-row">
@@ -74,14 +72,23 @@ export function renderCommentsList(commentsListData) {
         </div>
         <div class="add-form-row">
           <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
-        </div>
-        <div class="login-alert">Чтобы добавить комментарий, 
+        </div>`: `<div class="login-alert">Чтобы добавить комментарий, 
         <a id="authorization" href="#">авторизуйтесь</a>
-        </div>
+        </div>`
+        }
+        
+        
 
       </div>`;
   appElement.innerHTML = appHtml;
+  const authorization = document.getElementById("authorization");
   initEventListener(commentsListData);
+  if (authorization) {
+    authorization.addEventListener("click", () => {
+      renderLogin();
+    })
+  }
+
   // answerCommentListener();
   // delLastComment(commentsListData);
   // addTextComment();

@@ -35,16 +35,20 @@ import {
 export const addFormNameElement = document.getElementById("add-form-name");
 export const addFormButtonElement = document.getElementById("add-form-button");
 const addFormTextElement = document.getElementById("add-form-text");
-
-const addLoader = document.querySelector(".mask");
+// const addLoader = document.querySelector(".mask");
 export const addLoaderComment = document.querySelector(".mask-comment");
-
-
 
 export let commentsListData = [];
 
 // addLoaderComment.style.display = 'none';
 // addLoader.style.display = 'block';
+
+export let user = null;
+export function setUser(value) {
+    user = value;
+}
+
+// setUser("10");
 
 export const doFetchGetCommentList = () => {
     const appHtml = document.getElementById("app");
@@ -85,6 +89,8 @@ doFetchGetCommentList();
 // });
 
 export const doFetchPostComment = () => {
+    const addFormHtml = document.querySelector(".add-form")
+    addFormHtml.innerHTML = "Комментарий загружается...";
     postTodo(addFormTextElement, addFormNameElement)
         .then((response) => {
             checkStatus400(response)
@@ -104,17 +110,12 @@ export const doFetchPostComment = () => {
             todoException500(error)
             checkIsInternet(window)
         })
-        .finally(() => {
-            addLoaderComment.style.display = 'none';
-        })
         .then(() => {
             renderCommentsList(commentsListData);
+            pullComment();
+
         })
 }
-
-
-
-
 
 
 
