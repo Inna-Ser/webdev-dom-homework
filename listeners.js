@@ -46,7 +46,6 @@ export function pullComment() {
     const addFormNameElement = document.getElementById("add-form-name");
     const addFormTextElement = document.getElementById("add-form-text")
     addFormButtonElement.addEventListener("click", () => {
-        postTodo(addFormTextElement.value, addFormNameElement.value)
         addFormTextElement.style.backgroundColor = "#bcec30";
         addFormNameElement.style.backgroundColor = "";
         // doFetchGetCommentList.disabled = true;

@@ -90,8 +90,9 @@ doFetchGetCommentList();
 
 export const doFetchPostComment = () => {
     const addFormHtml = document.querySelector(".add-form")
+    const addFormTextElement = document.getElementById("add-form-text");
     addFormHtml.innerHTML = "Комментарий загружается...";
-    postTodo(addFormTextElement, addFormNameElement)
+    postTodo(addFormTextElement)
         .then((response) => {
             checkStatus400(response)
             checkStatus500(response)
@@ -102,7 +103,6 @@ export const doFetchPostComment = () => {
         .then(() => {
             doFetchGetCommentList()
             addFormNameElement.value = ""
-            addFormTextElement.value = ""
             likesCounterElement.value = ""
         })
         .catch((error) => {
@@ -116,7 +116,5 @@ export const doFetchPostComment = () => {
 
         })
 }
-
-
 
 console.log("It works!");

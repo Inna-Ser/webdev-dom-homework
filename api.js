@@ -32,7 +32,7 @@ export function getTodos() {
     // });
 }
 
-export function postTodo(addFormTextElement, addFormNameElement) {
+export function postTodo(addFormTextElement) {
     return fetch(todosURL, {
         method: "POST",
         headers: {
@@ -46,11 +46,11 @@ export function postTodo(addFormTextElement, addFormNameElement) {
                 .replaceAll('"', "&quot;")
                 .replaceAll("QUOTE_BEGIN", "<div class='quote' white-space: pre-line>")
                 .replaceAll("QUOTE_END", "</div>"),
-            name: addFormNameElement.value
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll("&", "&amp;")
-                .replaceAll('"', "&quot;"),
+            // name: addFormNameElement.value
+            //     .replaceAll("<", "&lt;")
+            //     .replaceAll(">", "&gt;")
+            //     .replaceAll("&", "&amp;")
+            //     .replaceAll('"', "&quot;"),
             forceError: false
         })
     })

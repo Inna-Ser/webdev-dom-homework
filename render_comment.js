@@ -76,17 +76,17 @@ export function renderCommentsList(commentsListData) {
         <a id="authorization" href="#">авторизуйтесь</a>
         </div>`
         }
-        
-        
-
       </div>`;
   appElement.innerHTML = appHtml;
-  const authorization = document.getElementById("authorization");
-  initEventListener(commentsListData);
-  if (authorization) {
-    authorization.addEventListener("click", () => {
+  const authorizationElement = document.getElementById("authorization");
+
+  if (authorizationElement) {
+    authorizationElement.addEventListener("click", () => {
       renderLogin();
     })
+  } else {
+    pullComment();
+    initEventListener(commentsListData);
   }
 
   // answerCommentListener();
@@ -100,8 +100,6 @@ export function renderCommentsList(commentsListData) {
   const addFormTextElement = document.getElementById("add-form-text");
   const likesCounterElement = document.querySelectorAll(".likes-counter");
   const addLoaderComment = document.querySelector(".mask-comment");
-
-  pullComment();
 
 };
 
