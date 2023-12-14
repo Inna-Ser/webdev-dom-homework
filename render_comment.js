@@ -1,20 +1,8 @@
 import {
-  answerCommentListener,
-  delLastComment,
-  editComment
-} from "./service_comment.js"
-
-import {
   initEventListener
 } from "./service_likes.js"
 
 import {
-  postTodo
-} from "./api.js"
-
-import {
-  addFormButtonElement,
-  doFetchPostComment,
   user
 } from "./main.js"
 import {
@@ -29,8 +17,6 @@ import {
 import {
   renderRegistr
 } from "./registrPage.js";
-
-const commentsListElements = document.getElementById("comments");
 
 export function renderCommentsList(commentsListData) {
   const appElement = document.getElementById('app');
@@ -53,12 +39,8 @@ export function renderCommentsList(commentsListData) {
             <div class="edit-button">
               <button class="add-form-button -edit" id="edit-form-button">Редактировать</button>
             <div/>
-            
-          
         </div>
         </div>
-        
-        
       </li>`
     })
     .join("");
@@ -85,14 +67,11 @@ export function renderCommentsList(commentsListData) {
       </div>`;
   appElement.innerHTML = appHtml;
   const authorizationElement = document.getElementById("authorization");
-  const registrationElemeht = document.getElementById("registr-button");
-
-  if (authorizationElement) {
+  const registrationElemeht = document.getElementById("registration");
+  if (!user) {
     authorizationElement.addEventListener("click", () => {
       renderLogin();
     })
-
-  } else if (registrationElemeht) {
     registrationElemeht.addEventListener("click", () => {
       renderRegistr();
       console.log(renderRegistr);

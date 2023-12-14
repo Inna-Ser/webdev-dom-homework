@@ -66,20 +66,20 @@ export function login({
         .then((response) => {
             return response.json();
         }).then((response) => {
+            console.log(response);
             setUser(response.user);
             setToken(response.user.token);
         })
 }
 
-export function registration({
-    login,
-    password
-}) {
-    return fetch(newUserURL, {
+export function registration(loginRegistrInputElement, passwordRegistrInputElement) {
+    return fetch(userURL, {
         method: "POST",
         body: JSON.stringify({
-            login,
-            password
+            body: JSON.stringify({
+                login: loginRegistrInputElement.value,
+                password: passwordRegistrInputElement.value
+            })
         })
     })
 }

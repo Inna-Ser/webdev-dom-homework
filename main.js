@@ -19,13 +19,9 @@ import {
     checkStatus201,
     todoException500,
     todoException400,
-    checkIsInternet
+    checkIsInternet,
+    checkStatus401
 } from "./exceptions.js";
-
-import {
-    pullComment
-} from "./listeners.js";
-
 
 export const addFormNameElement = document.getElementById("add-form-name");
 export const addFormButtonElement = document.getElementById("add-form-button");
@@ -66,9 +62,10 @@ export const doFetchGetCommentList = () => {
 doFetchGetCommentList();
 
 export const doFetchPostComment = () => {
-    const addFormHtml = document.querySelector(".add-form")
+    const addFormButton = document.querySelector(".add-form-button");
     const addFormTextElement = document.getElementById("add-form-text");
-    addFormHtml.innerHTML = "Комментарий загружается...";
+    addFormButton.textContent = "Комментарий загружается..."
+    addFormButton.disabled = true;
     postTodo(addFormTextElement)
         .then((response) => {
             checkStatus400(response)
@@ -80,15 +77,13 @@ export const doFetchPostComment = () => {
             doFetchGetCommentList()
             addFormNameElement.value = ""
             likesCounterElement.value = ""
+            addFormButton.disabled = false;
+            addFormButton.textContent = "Написать"
         })
         .catch((error) => {
             todoException400(error)
             todoException500(error)
             checkIsInternet(window)
-        })
-        .then(() => {
-            renderCommentsList(commentsListData);
-            pullComment();
         })
 }
 
