@@ -18,11 +18,17 @@ import {
   user
 } from "./main.js"
 import {
-  pullComment
+  pullComment,
+  deletLastComment,
+  addAnswerComment,
+  addTextComment
 } from "./listeners.js";
 import {
   renderLogin
 } from "./loginPage.js";
+import {
+  renderRegistr
+} from "./registrPage.js";
 
 const commentsListElements = document.getElementById("comments");
 
@@ -35,7 +41,7 @@ export function renderCommentsList(commentsListData) {
           <div>${com.name}</div>
           <div class="date" date-index="${index}">${com.date}</div>
         </div>
-        <div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
+        <div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}">
           <div class="comment-text">
             ${com.comment}
           </div>
@@ -67,26 +73,36 @@ export function renderCommentsList(commentsListData) {
           <textarea type="textarea" class="add-form-text" id="add-form-text" placeholder="Введите ваш коментарий" rows="4"
             aria-valuetext=""></textarea>
           <div class="add-form-row">
-            <button class="add-form-button" id="add-form-button">Написать</button>
+            <button class="add-form-button" disabled id="add-form-button">Написать</button>
           </div>
         </div>
         <div class="add-form-row">
           <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
         </div>`: `<div class="login-alert">Чтобы добавить комментарий, 
-        <a id="authorization" href="#">авторизуйтесь</a>
+        <a id="authorization" href="#">авторизуйтесь</a> или <a id="registration" href="#">зарегестрируйтесь</a>
         </div>`
         }
       </div>`;
   appElement.innerHTML = appHtml;
   const authorizationElement = document.getElementById("authorization");
+  const registrationElemeht = document.getElementById("registr-button");
 
   if (authorizationElement) {
     authorizationElement.addEventListener("click", () => {
       renderLogin();
     })
+
+  } else if (registrationElemeht) {
+    registrationElemeht.addEventListener("click", () => {
+      renderRegistr();
+      console.log(renderRegistr);
+    })
   } else {
     pullComment();
     initEventListener(commentsListData);
+    addAnswerComment();
+    deletLastComment();
+    addTextComment();
   }
 
   // answerCommentListener();

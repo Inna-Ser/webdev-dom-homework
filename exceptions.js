@@ -1,5 +1,4 @@
 import {
-    // password,
     getTodos
 } from "./api.js"
 

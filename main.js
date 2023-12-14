@@ -23,32 +23,20 @@ import {
 } from "./exceptions.js";
 
 import {
-    addTextComment,
-    addNameComment,
     pullComment
 } from "./listeners.js";
 
-import {
-    renderLogin
-} from "./loginPage.js";
 
 export const addFormNameElement = document.getElementById("add-form-name");
 export const addFormButtonElement = document.getElementById("add-form-button");
-const addFormTextElement = document.getElementById("add-form-text");
-// const addLoader = document.querySelector(".mask");
 export const addLoaderComment = document.querySelector(".mask-comment");
 
 export let commentsListData = [];
-
-// addLoaderComment.style.display = 'none';
-// addLoader.style.display = 'block';
 
 export let user = null;
 export function setUser(value) {
     user = value;
 }
-
-// setUser("10");
 
 export const doFetchGetCommentList = () => {
     const appHtml = document.getElementById("app");
@@ -66,27 +54,16 @@ export const doFetchGetCommentList = () => {
                     forceError: true,
                 }
             })
-
         })
         .then(() => {
             renderCommentsList(commentsListData);
         })
-    // .finally(() => {
-    //     // addLoaderComment.style.display = 'none';
-    //     // addLoader.style.display = 'none';
-    //     console.log(commentsListData);
-    //     renderCommentsList(commentsListData);
-    // })
-    // .catch((error) => {
-    //     todoException500(error);
-    // })
+        .catch((error) => {
+            todoException500(error);
+        })
 }
 
-
 doFetchGetCommentList();
-// renderLogin({
-//     doFetchGetCommentList
-// });
 
 export const doFetchPostComment = () => {
     const addFormHtml = document.querySelector(".add-form")
@@ -97,8 +74,7 @@ export const doFetchPostComment = () => {
             checkStatus400(response)
             checkStatus500(response)
             checkStatus201(response)
-            // checkStatus401(response)
-
+            checkStatus401(response)
         })
         .then(() => {
             doFetchGetCommentList()
@@ -113,7 +89,6 @@ export const doFetchPostComment = () => {
         .then(() => {
             renderCommentsList(commentsListData);
             pullComment();
-
         })
 }
 

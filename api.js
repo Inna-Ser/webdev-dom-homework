@@ -26,10 +26,6 @@ export function getTodos() {
             console.log(response);
             return checkStatus401(response)
         })
-    // .then((response) => {
-    //     console.log(response);
-    //     return response.json()
-    // });
 }
 
 export function postTodo(addFormTextElement) {
@@ -73,4 +69,17 @@ export function login({
             setUser(response.user);
             setToken(response.user.token);
         })
+}
+
+export function registration({
+    login,
+    password
+}) {
+    return fetch(newUserURL, {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            password
+        })
+    })
 }
