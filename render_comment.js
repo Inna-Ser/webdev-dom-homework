@@ -1,15 +1,12 @@
 import {
-  initEventListener
-} from "./service_likes.js"
-
-import {
   user
 } from "./main.js"
 import {
   pullComment,
   deletLastComment,
   addAnswerComment,
-  addTextComment
+  addTextComment,
+  addCounterLikes
 } from "./listeners.js";
 import {
   renderLogin
@@ -61,24 +58,20 @@ export function renderCommentsList(commentsListData) {
         <div class="add-form-row">
           <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
         </div>`: `<div class="login-alert">Чтобы добавить комментарий, 
-        <a id="authorization" href="#">авторизуйтесь</a> или <a id="registration" href="#">зарегестрируйтесь</a>
+        <a id="authorization" href="#">авторизуйтесь</a> 
         </div>`
         }
       </div>`;
   appElement.innerHTML = appHtml;
   const authorizationElement = document.getElementById("authorization");
-  const registrationElemeht = document.getElementById("registration");
-  if (!user) {
+  // const registrationElemeht = document.getElementById("registration");
+  if (authorizationElement) {
     authorizationElement.addEventListener("click", () => {
       renderLogin();
     })
-    registrationElemeht.addEventListener("click", () => {
-      renderRegistr();
-      console.log(renderRegistr);
-    })
   } else {
     pullComment();
-    initEventListener(commentsListData);
+    addCounterLikes(commentsListData);
     addAnswerComment();
     deletLastComment();
     addTextComment();

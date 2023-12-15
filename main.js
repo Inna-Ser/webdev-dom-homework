@@ -10,8 +10,9 @@ import {
 } from "./api.js";
 
 import {
-    getCurrentDate
-} from "./service_date.js";
+    formatDateToRu,
+    formatDateToUs
+} from "/lib/formatDate/formatDate.js";
 
 import {
     checkStatus500,
@@ -39,7 +40,7 @@ export const doFetchGetCommentList = () => {
     appHtml.innerHTML = "Подождите, пожалуйста, комментарии загружаются";
     getTodos().then((responseData) => {
             commentsListData = responseData.comments.map((comment) => {
-                comment.date = getCurrentDate(comment.date);
+                comment.date = formatDateToRu(comment.date);
                 return {
                     name: comment.author.name,
                     date: comment.date,
