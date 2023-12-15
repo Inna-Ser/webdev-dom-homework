@@ -72,11 +72,12 @@ export function login({
         })
 }
 
-export function registration(loginRegistrInputElement, passwordRegistrInputElement) {
+export function registration(nameRegistrInputElement, loginRegistrInputElement, passwordRegistrInputElement) {
     return fetch(userURL, {
         method: "POST",
         body: JSON.stringify({
             body: JSON.stringify({
+                name: nameRegistrInputElement.value,
                 login: loginRegistrInputElement.value,
                 password: passwordRegistrInputElement.value
             })

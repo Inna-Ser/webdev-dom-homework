@@ -11,9 +11,6 @@ import {
 import {
   renderLogin
 } from "./loginPage.js";
-import {
-  renderRegistr
-} from "./registrPage.js";
 
 export function renderCommentsList(commentsListData) {
   const appElement = document.getElementById('app');
@@ -66,6 +63,7 @@ export function renderCommentsList(commentsListData) {
   const authorizationElement = document.getElementById("authorization");
   // const registrationElemeht = document.getElementById("registration");
   if (authorizationElement) {
+    console.log(authorizationElement)
     authorizationElement.addEventListener("click", () => {
       renderLogin();
     })

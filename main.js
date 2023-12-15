@@ -76,8 +76,6 @@ export const doFetchPostComment = () => {
         })
         .then(() => {
             doFetchGetCommentList()
-            addFormNameElement.value = ""
-            likesCounterElement.value = ""
             addFormButton.disabled = false;
             addFormButton.textContent = "Написать"
         })

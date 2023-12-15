@@ -8,9 +8,6 @@ import {
     doFetchGetCommentList,
 } from "./main.js";
 import {
-    renderRegistr
-} from "./registrPage.js";
-import {
     renderCommentsList
 } from "./render_comment.js";
 
@@ -86,15 +83,17 @@ export function inputLogin() {
 
 export function addRegistration() {
     const registrButtonElement = document.getElementById("registr-button");
-    const loginRegistrInputElement = document.getElementById("registr__login-input");
-    const passwordRegistrInputElement = document.getElementById("registr__password-input");
+    const nameRegistrInputElement = document.getElementById("name-input");
+    const loginRegistrInputElement = document.getElementById("login-input");
+    const passwordRegistrInputElement = document.getElementById("password-input");
     registrButtonElement.addEventListener("click", () => {
         login({
+            name: nameRegistrInputElement.value,
             login: loginRegistrInputElement.value,
             password: passwordRegistrInputElement.value,
         }).then(() => {
-            renderRegistr();
-            console.log(renderRegistr());
+            renderCommentsList();
+            console.log(renderCommentsList);
         })
     })
 };
