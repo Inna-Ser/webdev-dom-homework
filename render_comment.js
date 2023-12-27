@@ -6,20 +6,26 @@ import {
   deletLastComment,
   addAnswerComment,
   addTextComment,
-  addCounterLikes
+  addCounterLikes,
+  editComment
 } from "./listeners.js";
 import {
   renderLogin
 } from "./loginPage.js";
+import {
+  formatDateToRu,
+  formatDateToUs
+} from "./lib/formatDate/formatDate.js";
 
 export function renderCommentsList(commentsListData) {
+  console.log(commentsListData);
   const appElement = document.getElementById('app');
-
+  const country = "ru";
   const commentsListHTML = commentsListData.map((com, index) => {
-      return `<li class="comment" id="comment" data-index="${index}">
+      return `<li class="comment" id="comment" data-index="${index}" data-id="${com.id}">
         <div class="comment-header" >
           <div>${com.name}</div>
-          <div class="date" date-index="${index}">${com.date}</div>
+          <div class="date" date-index="${index}">${country === "ru" ? formatDateToRu(com.date) : formatDateToUs(com.date)}</div>
         </div>
         <div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}">
           <div class="comment-text">
@@ -38,6 +44,7 @@ export function renderCommentsList(commentsListData) {
       </li>`
     })
     .join("");
+  console.log(commentsListHTML);
 
   const appHtml =
     `<div class="container">
@@ -73,6 +80,7 @@ export function renderCommentsList(commentsListData) {
     addAnswerComment();
     deletLastComment();
     addTextComment();
+    editComment();
   }
 
   // answerCommentListener();

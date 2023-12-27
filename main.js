@@ -23,6 +23,9 @@ import {
     checkIsInternet,
     checkStatus401
 } from "./exceptions.js";
+import {
+    deletLastComment
+} from "./listeners.js";
 
 export const addFormNameElement = document.getElementById("add-form-name");
 export const addFormButtonElement = document.getElementById("add-form-button");
@@ -40,8 +43,9 @@ export const doFetchGetCommentList = () => {
     appHtml.innerHTML = "Подождите, пожалуйста, комментарии загружаются";
     getTodos().then((responseData) => {
             commentsListData = responseData.comments.map((comment) => {
-                comment.date = formatDateToRu(comment.date);
+                // comment.date = formatDateToRu(comment.date);
                 return {
+                    id: comment.id,
                     name: comment.author.name,
                     date: comment.date,
                     comment: comment.text,
@@ -84,6 +88,10 @@ export const doFetchPostComment = () => {
             todoException500(error)
             checkIsInternet(window)
         })
+}
+
+export const doFetchDeleteComment = () => {
+    deletLastComment();
 }
 
 console.log("It works!");

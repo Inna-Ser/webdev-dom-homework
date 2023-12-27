@@ -2,6 +2,10 @@ import {
     checkStatus401
 } from "./exceptions.js";
 import {
+    deletLastComment
+} from "./listeners.js";
+import {
+    doFetchDeleteComment,
     setUser
 } from "./main.js";
 
@@ -13,6 +17,7 @@ export const setToken = (newToken) => {
 const todosURL = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments";
 const userURL = "https://wedev-api.sky.pro/api/user/login";
 const todoURL = "https://wedev-api.sky.pro/api/v2/inna-serebriakova/comment";
+const newUserURL = "https://wedev-api.sky.pro/api/user";
 
 
 export function getTodos() {
@@ -72,15 +77,35 @@ export function login({
         })
 }
 
-export function registration(nameRegistrInputElement, loginRegistrInputElement, passwordRegistrInputElement) {
-    return fetch(userURL, {
-        method: "POST",
-        body: JSON.stringify({
+export function registration({
+    name,
+    login,
+    password
+}) {
+    return fetch(newUserURL, {
+            method: "POST",
             body: JSON.stringify({
-                name: nameRegistrInputElement.value,
-                login: loginRegistrInputElement.value,
-                password: passwordRegistrInputElement.value
+                name,
+                login,
+                password
             })
         })
-    })
+        .then((response) => {
+            return response.json();
+        }).then((response) => {
+            setUser(response.user);
+            setToken(response.user.token);
+        })
+}
+
+export function deleteComment() {
+    return fetch(todosURL, {
+            method: "DELETE",
+            headers: {
+                Authorization: token
+            }
+        })
+        .then((response) => {
+            doFetchDeleteComment();
+        })
 }

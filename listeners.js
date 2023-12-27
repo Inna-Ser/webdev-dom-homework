@@ -1,5 +1,6 @@
 import {
     login,
+    registration,
 } from "./api.js";
 import {
     commentsListData,
@@ -46,12 +47,14 @@ export function pullComment() {
 }
 
 export function addAnswerComment() {
-    const commentsElement = document.querySelectorAll(".comment");
+    const commentsElement = document.querySelectorAll(".comment-text");
     const addFormTextElement = document.getElementById("add-form-text");
+
     for (const commentElement of commentsElement) {
         commentElement.addEventListener("click", () => {
-            const index = commentElement.dataset.index;
+            const index = commentElement.closest(".comment").dataset.index;
             console.log(addFormTextElement);
+            console.log(index);
             addFormTextElement.value = `QUOTE_BEGIN ${commentsListData[index].name}: 
     ${commentsListData[index].comment} QUOTE_END`;
         })
@@ -71,14 +74,12 @@ export function inputLogin() {
     const buttonElement = document.getElementById("login-button");
     const loginInputElement = document.getElementById("login-input");
     const passwordInputElement = document.getElementById("password-input");
-    buttonElement.addEventListener("click", () => {
-        login({
-            login: loginInputElement.value,
-            password: passwordInputElement.value,
-        }).then(() => {
-            doFetchGetCommentList()
-        })
-    });
+    login({
+        login: loginInputElement.value,
+        password: passwordInputElement.value,
+    }).then(() => {
+        doFetchGetCommentList()
+    })
 }
 
 export function addRegistration() {
@@ -86,15 +87,12 @@ export function addRegistration() {
     const nameRegistrInputElement = document.getElementById("name-input");
     const loginRegistrInputElement = document.getElementById("login-input");
     const passwordRegistrInputElement = document.getElementById("password-input");
-    registrButtonElement.addEventListener("click", () => {
-        login({
-            name: nameRegistrInputElement.value,
-            login: loginRegistrInputElement.value,
-            password: passwordRegistrInputElement.value,
-        }).then(() => {
-            renderCommentsList();
-            console.log(renderCommentsList);
-        })
+    registration({
+        name: nameRegistrInputElement.value,
+        login: loginRegistrInputElement.value,
+        password: passwordRegistrInputElement.value,
+    }).then(() => {
+        doFetchGetCommentList()
     })
 };
 
@@ -105,20 +103,21 @@ export function editComment() {
     for (const editCommentButton of editCommentsButton) {
         editCommentButton.addEventListener("click", (e) => {
             e.stopPropagation();
-            const boxTextComment = document.querySelectorAll(".comment-body");
+            const boxTextComment = editCommentButton.closest(".comment-body");
+            console.log(boxTextComment);
             const index = boxTextComment.dataset.index;
             const addFormTextElement = document.getElementById("add-form-text");
             const addFormNameElement = document.getElementById("add-form-name");
 
             if (commentsListData[index].isEdit === false) {
                 commentsListData[index].isEdit = true;
-                boxTextComment[index].innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
+                boxTextComment.innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
       aria-valuetext="">${commentsListData[index].comment}</textarea>`;
             } else {
                 commentsListData[index].isEdit = false;
-                boxTextComment[index].innerHTML = `<div class="${com.isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
+                boxTextComment.innerHTML = `<div class="${commentsListData[index].isEdit ? 'comment-body -edit' : 'comment-body'}" data-index="${index}>
           <div class="comment-text">
-            ${com[index].comment}
+            ${commentsListData[index].comment}
           </div>`
             }
             renderCommentsList(commentsListData);
