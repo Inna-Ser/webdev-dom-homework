@@ -1,10 +1,8 @@
-import {
-    getTodos
-} from "./api.js"
+import { getTodos } from './api.js'
 
 export function checkStatus500(response) {
     if (response.status === 500) {
-        throw new Error('Ошибка сервера');
+        throw new Error('Ошибка сервера')
     }
 }
 
@@ -16,7 +14,7 @@ export function checkStatus400(response) {
 
 export function checkStatus201(response) {
     if (response.status === 201) {
-        return response.json();
+        return response.json()
     }
 }
 
@@ -28,11 +26,11 @@ export function checkIsInternet(window) {
 
 export function checkStatus401(response) {
     if (response.status === 401) {
-        password = prompt('Введите верный пароль');
-        getTodos();
-        throw new Error('Нет авторизации');
+        // password = prompt('Введите верный пароль')
+        getTodos()
+        throw new Error('Нет авторизации')
     }
-    return response.json();
+    return response.json()
 }
 
 export function todoException500(error) {
