@@ -96,6 +96,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
+    max-height: 500px;
+    overflow-y: scroll;
 }
 
 .comment,
@@ -136,13 +138,9 @@ body {
   margin-bottom: 20px;
 }
 
-
-
 .-loading-like {
   animation: rotating 2s linear infinite;
 }
-
-;
 
 .likes {
   display: flex;
@@ -150,7 +148,6 @@ body {
 }
 
 .like-button {
-
   all: unset;
   cursor: pointer;
 }

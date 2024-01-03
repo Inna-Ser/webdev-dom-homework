@@ -2,7 +2,7 @@ import {
     checkStatus401
 } from './exceptions.js'
 import {
-    doFetchDeleteComment,
+    // doFetchDeleteComment,
     setUser
 } from './main.js'
 
@@ -12,7 +12,7 @@ export const setToken = (newToken) => {
 }
 
 const todosURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments'
-const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/id'
+// const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/id'
 const userURL = 'https://wedev-api.sky.pro/api/user/login'
 const newUserURL = 'https://wedev-api.sky.pro/api/user'
 

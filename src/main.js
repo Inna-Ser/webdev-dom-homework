@@ -20,8 +20,8 @@ import {
     checkStatus401,
 } from './exceptions.js'
 import {
-    deletLastComment
-} from './listeners.js'
+    renderForm
+} from './renderForm.js'
 
 export const addFormNameElement = document.getElementById('add-form-name')
 export const addFormButtonElement = document.getElementById('add-form-button')
@@ -35,9 +35,9 @@ export function setUser(value) {
 }
 
 export const doFetchGetCommentList = () => {
-    const appHtml = document.getElementById('app')
+    const appHtml = document.getElementById('comments')
     appHtml.innerHTML = 'Подождите, пожалуйста, комментарии загружаются'
-    getTodos()
+    return getTodos()
         .then((responseData) => {
             commentsListData = responseData.comments.map((comment) => {
                 return {
@@ -60,14 +60,13 @@ export const doFetchGetCommentList = () => {
         })
 }
 
-doFetchGetCommentList()
 
 export const doFetchPostComment = () => {
-    const addFormButton = document.querySelector('.add-form-button')
+    const addLoader = document.querySelector('.loader-comment')
     const addFormTextElement = document.getElementById('add-form-text')
     const addFormElement = document.querySelector('.add-form')
-    addFormElement.innerHTML = 'Комментарий загружается...'
-    addFormElement.disabled = true
+    addFormElement.style.display = "none"
+    addLoader.textContent = "Комментарий загружается..."
     postTodo(addFormTextElement)
         .then((response) => {
             checkStatus400(response)
@@ -77,21 +76,39 @@ export const doFetchPostComment = () => {
         })
         .then(() => {
             doFetchGetCommentList()
-            addFormButton.disabled = false
-            addFormButton.textContent = 'Написать'
+            addFormTextElement.value = ""
+            addFormTextElement.style.backgroundColor = "white"
         })
         .catch((error) => {
             todoException400(error)
             todoException500(error)
             checkIsInternet(window)
         })
+        .finally(() => {
+            addFormElement.style.display = "flex"
+            addLoader.textContent = ""
+        })
 }
-doFetchPostComment()
+// doFetchPostComment()
 
 export const doFetchDeleteComment = () => {
     deleteComment(commentsListData.id)
 }
 
-doFetchDeleteComment()
+// doFetchDeleteComment()
+
+export function renderApp() {
+    const containerApp = document.getElementById('app')
+    containerApp.innerHTML = `<div class="container">
+<ul class="comments" id="comments">
+        </ul>
+        <div class="footer-conteiner"></div>
+        </div>`
+    doFetchGetCommentList()
+        .then(() => {
+            renderForm()
+        })
+}
+renderApp()
 
 console.log('It works!')

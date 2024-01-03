@@ -8,6 +8,7 @@ import {
     doFetchPostComment,
     doFetchGetCommentList,
     doFetchDeleteComment,
+    renderApp,
 } from './main.js'
 import {
     renderCommentsList
@@ -66,7 +67,7 @@ export function inputLogin() {
         login: loginInputElement.value,
         password: passwordInputElement.value,
     }).then(() => {
-        doFetchGetCommentList()
+        renderApp()
     })
 }
 
@@ -106,24 +107,15 @@ export function editComment() {
     for (const editCommentButton of editCommentsButton) {
         editCommentButton.addEventListener('click', (e) => {
             e.stopPropagation()
-            const index = editCommentButton.closest('.comment').dataset.index
-            console.log(index)
-            // const index = boxTextComment.dataset.index
-            // if (commentsListData[index].isEdit === false) {
-            //     commentsListData[index].isEdit = true
-            addFormTextElement.innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
-      aria-valuetext="">${commentsListData[index].comment}</textarea>`
-            //     } else {
-            //         commentsListData[index].isEdit = false
-            //         index.innerHTML = `<div class="${
-            //             commentsListData[index].isEdit
-            //                 ? 'comment-body -edit'
-            //                 : 'comment-body'
-            //         }" data-index="${index}>
-            //   <div class="comment-text">
-            //     ${commentsListData[index].comment}
-            //   </div>`
-            //     }
+            const boxTextComment = editCommentButton.closest('.comment')
+            console.log(boxTextComment)
+            const index = boxTextComment.dataset.index
+            if (commentsListData[index].isEdit === false) {
+                commentsListData[index].isEdit = true
+            } else {
+                commentsListData[index].isEdit = false
+                commentsListData[index].comment = addFormTextElement.value
+            }
             renderCommentsList(commentsListData)
         })
     }

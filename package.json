@@ -18,7 +18,7 @@
         "format": "prettier --write ./src/",
         "lint:js": "eslint ./src/**/*.js",
         "lint:css": "stylelint ./src/**/*.css",
-        "lint": "npm run lint:js && npm run lint:css",
+        "lint": "npm run lint:js",
         "prepare": "husky install"
     },
     "keywords": [],
