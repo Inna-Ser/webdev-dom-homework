@@ -1,11 +1,17 @@
-import { login, registration } from './api.js'
+import {
+    login,
+    registration
+} from './api.js'
 import {
     commentsListData,
     addFormButtonElement,
     doFetchPostComment,
     doFetchGetCommentList,
+    doFetchDeleteComment,
 } from './main.js'
-import { renderCommentsList } from './render_comment.js'
+import {
+    renderCommentsList
+} from './render_comment.js'
 
 export function addTextComment() {
     const addFormTextElement = document.getElementById('add-form-text')
@@ -23,7 +29,7 @@ export function addNameComment() {
     const addFormNameElement = document.getElementById('add-form-name')
     addFormNameElement.addEventListener('input', () => {
         if (
-            addFormNameElement.value === '' 
+            addFormNameElement.value === ''
             // addFormTextElement.value === ''
         ) {
             addFormButtonElement.disabled = true
@@ -44,26 +50,11 @@ export function pullComment() {
     })
 }
 
-export function addAnswerComment() {
-    const commentsElement = document.querySelectorAll('.comment-text')
-    const addFormTextElement = document.getElementById('add-form-text')
-
-    for (const commentElement of commentsElement) {
-        commentElement.addEventListener('click', () => {
-            const index = commentElement.closest('.comment').dataset.index
-            console.log(addFormTextElement)
-            console.log(index)
-            addFormTextElement.value = `QUOTE_BEGIN ${commentsListData[index].name}: 
-    ${commentsListData[index].comment} QUOTE_END`
-        })
-    }
-    addFormTextElement.value = ''
-}
-
 export function deletLastComment() {
     const delCommentButton = document.getElementById('del-form-button')
     delCommentButton.addEventListener('click', () => {
         commentsListData.pop()
+        doFetchDeleteComment()
         renderCommentsList(commentsListData)
     })
 }
@@ -93,31 +84,46 @@ export function addRegistration() {
     })
 }
 
+export function addAnswerComment() {
+    const commentsElement = document.querySelectorAll('.comment-text')
+    const addFormTextElement = document.getElementById('add-form-text')
+    for (const commentElement of commentsElement) {
+        commentElement.addEventListener('click', () => {
+            const index = commentElement.closest('.comment').dataset.index
+            console.log(addFormTextElement)
+            console.log(index)
+            addFormTextElement.value = `QUOTE_BEGIN ${commentsListData[index].name}: 
+    ${commentsListData[index].comment} QUOTE_END`
+        })
+    }
+    addFormTextElement.value = ''
+}
+
 export function editComment() {
     /*этот метод не работает, пока не могу разобраться*/
     const editCommentsButton = document.querySelectorAll('.edit-button')
+    const addFormTextElement = document.getElementById('add-form-text')
     for (const editCommentButton of editCommentsButton) {
         editCommentButton.addEventListener('click', (e) => {
             e.stopPropagation()
-            const boxTextComment = editCommentButton.closest('.comment-body')
-            console.log(boxTextComment)
-            const index = boxTextComment.dataset.index
-
-            if (commentsListData[index].isEdit === false) {
-                commentsListData[index].isEdit = true
-                boxTextComment.innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
+            const index = editCommentButton.closest('.comment').dataset.index
+            console.log(index)
+            // const index = boxTextComment.dataset.index
+            // if (commentsListData[index].isEdit === false) {
+            //     commentsListData[index].isEdit = true
+            addFormTextElement.innerHTML = `<textarea type="textarea" class="add-form-text" id="add-form-text" rows="4"
       aria-valuetext="">${commentsListData[index].comment}</textarea>`
-            } else {
-                commentsListData[index].isEdit = false
-                boxTextComment.innerHTML = `<div class="${
-                    commentsListData[index].isEdit
-                        ? 'comment-body -edit'
-                        : 'comment-body'
-                }" data-index="${index}>
-          <div class="comment-text">
-            ${commentsListData[index].comment}
-          </div>`
-            }
+            //     } else {
+            //         commentsListData[index].isEdit = false
+            //         index.innerHTML = `<div class="${
+            //             commentsListData[index].isEdit
+            //                 ? 'comment-body -edit'
+            //                 : 'comment-body'
+            //         }" data-index="${index}>
+            //   <div class="comment-text">
+            //     ${commentsListData[index].comment}
+            //   </div>`
+            //     }
             renderCommentsList(commentsListData)
         })
     }
@@ -143,9 +149,9 @@ export function addCounterLikes(commentsListData) {
             const index = likeButtonElement.dataset.index
 
             delay(2000).then(() => {
-                commentsListData.likes = commentsListData.isLiked
-                    ? commentsListData.likes - 1
-                    : commentsListData.likes + 1
+                commentsListData.likes = commentsListData.isLiked ?
+                    commentsListData.likes - 1 :
+                    commentsListData.likes + 1
                 commentsListData.isLiked = !commentsListData.isLiked
                 commentsListData.isLikeLoading = false
                 renderCommentsList(commentsListData)

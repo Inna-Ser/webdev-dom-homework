@@ -225,7 +225,7 @@ body {
 .form-footer {
   display: flex;
   flex-direction: column;
-  row-gap: 30px;
+  row-gap: 25px;
 }
 
 .add-form-button:hover {
@@ -261,7 +261,13 @@ body {
 }
 
 .link {
+  font-size: 24px;
+  padding: 10px 20px;
+  background-color: white;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
   font-size: 28;
-  color: white;
+  color: #5f53c6;
   text-align: center;
 }

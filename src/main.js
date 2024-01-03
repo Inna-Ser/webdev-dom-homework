@@ -1,8 +1,14 @@
 'use strict'
 
-import { renderCommentsList } from './render_comment.js'
+import {
+    renderCommentsList
+} from './render_comment.js'
 
-import { getTodos, postTodo } from './api.js'
+import {
+    deleteComment,
+    getTodos,
+    postTodo
+} from './api.js'
 
 import {
     checkStatus500,
@@ -13,7 +19,9 @@ import {
     checkIsInternet,
     checkStatus401,
 } from './exceptions.js'
-import { deletLastComment } from './listeners.js'
+import {
+    deletLastComment
+} from './listeners.js'
 
 export const addFormNameElement = document.getElementById('add-form-name')
 export const addFormButtonElement = document.getElementById('add-form-button')
@@ -32,7 +40,6 @@ export const doFetchGetCommentList = () => {
     getTodos()
         .then((responseData) => {
             commentsListData = responseData.comments.map((comment) => {
-                // comment.date = formatDateToRu(comment.date);
                 return {
                     id: comment.id,
                     name: comment.author.name,
@@ -58,8 +65,9 @@ doFetchGetCommentList()
 export const doFetchPostComment = () => {
     const addFormButton = document.querySelector('.add-form-button')
     const addFormTextElement = document.getElementById('add-form-text')
-    addFormButton.textContent = 'Комментарий загружается...'
-    addFormButton.disabled = true
+    const addFormElement = document.querySelector('.add-form')
+    addFormElement.innerHTML = 'Комментарий загружается...'
+    addFormElement.disabled = true
     postTodo(addFormTextElement)
         .then((response) => {
             checkStatus400(response)
@@ -78,9 +86,12 @@ export const doFetchPostComment = () => {
             checkIsInternet(window)
         })
 }
+doFetchPostComment()
 
 export const doFetchDeleteComment = () => {
-    deletLastComment()
+    deleteComment(commentsListData.id)
 }
+
+doFetchDeleteComment()
 
 console.log('It works!')

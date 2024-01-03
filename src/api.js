@@ -12,6 +12,7 @@ export const setToken = (newToken) => {
 }
 
 const todosURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments'
+const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/id'
 const userURL = 'https://wedev-api.sky.pro/api/user/login'
 const newUserURL = 'https://wedev-api.sky.pro/api/user'
 
@@ -44,11 +45,6 @@ export function postTodo(addFormTextElement) {
                     "<div class='quote' white-space: pre-line>",
                 )
                 .replaceAll('QUOTE_END', '</div>'),
-            // name: addFormNameElement.value
-            //     .replaceAll("<", "&lt;")
-            //     .replaceAll(">", "&gt;")
-            //     .replaceAll("&", "&amp;")
-            //     .replaceAll('"', "&quot;"),
             forceError: false,
         }),
     })
@@ -97,13 +93,13 @@ export function registration({
         })
 }
 
-export function deleteComment() {
-    return fetch(todosURL, {
+export function deleteComment({
+    id
+}) {
+    return fetch(todosURL + '/' + id, {
         method: 'DELETE',
         headers: {
             Authorization: token,
         },
-    }).then(() => {
-        doFetchDeleteComment()
-    })
+    }).then((response) => response.pop())
 }

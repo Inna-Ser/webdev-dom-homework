@@ -1,37 +1,30 @@
+import { user } from './main.js'
 import {
-  user
-} from './main.js'
-import {
-  pullComment,
-  deletLastComment,
-  addAnswerComment,
-  addTextComment,
-  addCounterLikes,
-  editComment,
+    pullComment,
+    deletLastComment,
+    addAnswerComment,
+    addTextComment,
+    addCounterLikes,
+    editComment,
 } from './listeners.js'
-import {
-  renderLogin
-} from './loginPage.js'
-import {
-  format
-} from 'date-fns'
+import { renderLogin } from './loginPage.js'
+import { format } from 'date-fns'
 export function renderCommentsList(commentsListData) {
-  console.log(commentsListData)
-  console.log(document.getElementById('app'))
-  const appElement = document.getElementById('app')
-  // const country = "ru";
-  console.log('start')
-  const commentsListHTML = commentsListData
-    .map((com, index) => {
-      console.log(com)
-      return `<li class="comment" id="comment" data-index="${index}" data-id="${
+    console.log(commentsListData)
+    console.log(document.getElementById('app'))
+    const appElement = document.getElementById('app')
+    console.log('start')
+    const commentsListHTML = commentsListData
+        .map((com, index) => {
+            console.log(com)
+            return `<li class="comment" id="comment" data-index="${index}" data-id="${
                 com.id
             }">
         <div class="comment-header" >
           <div>${com.name}</div>
           <div class="date" date-index="${index}">${format(
               new Date(com.date),
-              'yyyy-MM-dd hh/mm/ss',
+              'yyyy-MM-dd hh:mm:ss',
           )}</div>
         </div>
         <div class="${
@@ -53,11 +46,11 @@ export function renderCommentsList(commentsListData) {
         </div>
         </div>
       </li>`
-    })
-    .join('')
-  console.log(commentsListHTML)
+        })
+        .join('')
+    console.log(commentsListHTML)
 
-  const appHtml = `<div class="container">
+    const appHtml = `<div class="container">
         <ul class="comments" id="comments">
           ${commentsListHTML}
         </ul>
@@ -79,31 +72,30 @@ export function renderCommentsList(commentsListData) {
         </div>`
         }
       </div>`
-  appElement.innerHTML = appHtml
-  const authorizationElement = document.getElementById('authorization')
-  // const registrationElemeht = document.getElementById("registration");
-  if (authorizationElement) {
-    console.log(authorizationElement)
-    authorizationElement.addEventListener('click', () => {
-      renderLogin()
-    })
-  } else {
-    pullComment()
-    addCounterLikes(commentsListData)
-    addAnswerComment()
-    deletLastComment()
-    addTextComment()
-    editComment()
-  }
+    appElement.innerHTML = appHtml
+    const authorizationElement = document.getElementById('authorization')
+    // const registrationElemeht = document.getElementById("registration");
+    if (authorizationElement) {
+        console.log(authorizationElement)
+        authorizationElement.addEventListener('click', () => {
+            renderLogin()
+        })
+    } else {
+        pullComment()
+        addCounterLikes(commentsListData)
+        addAnswerComment()
+        deletLastComment()
+        addTextComment()
+        editComment()
+    }
 
-  // answerCommentListener();
-  // delLastComment(commentsListData);
-  // addTextComment();
+    // answerCommentListener();
+    // delLastComment(commentsListData);
+    // addTextComment();
 
-  // addNameComment();
-  // editComment();
-  // addByKey();
-
+    // addNameComment();
+    // editComment();
+    // addByKey();
 }
 
 // pullComment();
