@@ -1,6 +1,8 @@
 import {
   format
 } from 'date-fns'
+import { addCounterLikes, editComment } from './listeners'
+import { user } from './main'
 export function renderCommentsList(commentsListData) {
   const appElement = document.getElementById('comments')
   const commentsListHTML = commentsListData
@@ -40,6 +42,11 @@ export function renderCommentsList(commentsListData) {
     .join('')
 
   appElement.innerHTML = commentsListHTML
+
+  if(user) {
+    editComment()
+    addCounterLikes(commentsListData)
+  }
 
   // answerCommentListener();
   // delLastComment(commentsListData);

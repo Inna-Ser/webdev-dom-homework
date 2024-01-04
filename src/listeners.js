@@ -108,9 +108,8 @@ export function editComment() {
         editCommentButton.addEventListener('click', (e) => {
             e.stopPropagation()
             const boxTextComment = editCommentButton.closest('.comment')
-            console.log(boxTextComment)
             const index = boxTextComment.dataset.index
-            if (commentsListData[index].isEdit === false) {
+            if (!commentsListData[index].isEdit) {
                 commentsListData[index].isEdit = true
             } else {
                 commentsListData[index].isEdit = false

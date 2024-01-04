@@ -1,10 +1,22 @@
-import { addAnswerComment, addCounterLikes, addTextComment, deletLastComment, editComment, pullComment } from "./listeners"
-import { renderLogin } from "./loginPage"
-import { commentsListData, user } from "./main"
+import {
+    addAnswerComment,
+    addCounterLikes,
+    addTextComment,
+    deletLastComment,
+    editComment,
+    pullComment
+} from "./listeners"
+import {
+    renderLogin
+} from "./loginPage"
+import {
+    commentsListData,
+    user
+} from "./main"
 
 export const renderForm = () => {
-const conteinerFooter = document.querySelector(".footer-conteiner")
-conteinerFooter.innerHTML = `
+    const conteinerFooter = document.querySelector(".footer-conteiner")
+    conteinerFooter.innerHTML = `
 ${
     user
         ? `<div class="loader-comment"></div>
@@ -20,10 +32,10 @@ ${
   <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
 </div>`
         : `<div class="login-alert">Чтобы добавить комментарий, 
-<a id="authorization" href="#">авторизуйтесь</a>`
+<a id="authorization" href="#">авторизуйтесь</a>
+</div>`
 }`
-const authorizationElement = document.getElementById('authorization')
-    // const registrationElemeht = document.getElementById("registration");
+    const authorizationElement = document.getElementById('authorization')
     if (authorizationElement) {
         console.log(authorizationElement)
         authorizationElement.addEventListener('click', () => {
