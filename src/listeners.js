@@ -91,8 +91,6 @@ export function addAnswerComment() {
     for (const commentElement of commentsElement) {
         commentElement.addEventListener('click', () => {
             const index = commentElement.closest('.comment').dataset.index
-            console.log(addFormTextElement)
-            console.log(index)
             addFormTextElement.value = `QUOTE_BEGIN ${commentsListData[index].name}: 
     ${commentsListData[index].comment} QUOTE_END`
         })
@@ -101,14 +99,14 @@ export function addAnswerComment() {
 }
 
 export function editComment() {
-    /*этот метод не работает, пока не могу разобраться*/
     const editCommentsButton = document.querySelectorAll('.edit-button')
     const addFormTextElement = document.getElementById('add-form-text')
     for (const editCommentButton of editCommentsButton) {
         editCommentButton.addEventListener('click', (e) => {
             e.stopPropagation()
-            const boxTextComment = editCommentButton.closest('.comment')
-            const index = boxTextComment.dataset.index
+            const index = editCommentButton.closest('.comment').dataset.index
+            addFormTextElement.value = commentsListData[index].comment
+            // здесь не работает тернальный оператор и изменения не сохраняются
             if (!commentsListData[index].isEdit) {
                 commentsListData[index].isEdit = true
             } else {

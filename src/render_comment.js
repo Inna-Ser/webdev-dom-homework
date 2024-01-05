@@ -3,6 +3,7 @@ import {
 } from 'date-fns'
 import { addCounterLikes, editComment } from './listeners'
 import { user } from './main'
+
 export function renderCommentsList(commentsListData) {
   const appElement = document.getElementById('comments')
   const commentsListHTML = commentsListData
