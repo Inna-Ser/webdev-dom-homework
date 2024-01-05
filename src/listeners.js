@@ -105,8 +105,7 @@ export function editComment() {
         editCommentButton.addEventListener('click', (e) => {
             e.stopPropagation()
             const index = editCommentButton.closest('.comment').dataset.index
-            addFormTextElement.value = commentsListData[index].comment
-            // здесь не работает тернальный оператор и изменения не сохраняются
+            addFormTextElement.innerHTML = commentsListData[index].comment
             if (!commentsListData[index].isEdit) {
                 commentsListData[index].isEdit = true
             } else {
