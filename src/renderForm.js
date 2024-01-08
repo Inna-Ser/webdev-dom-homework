@@ -1,4 +1,7 @@
 import {
+    deleteComment
+} from "./api"
+import {
     addAnswerComment,
     addCounterLikes,
     addTextComment,
@@ -37,7 +40,6 @@ ${
 }`
     const authorizationElement = document.getElementById('authorization')
     if (authorizationElement) {
-        console.log(authorizationElement)
         authorizationElement.addEventListener('click', () => {
             renderLogin()
         })
@@ -48,5 +50,6 @@ ${
         deletLastComment()
         addTextComment()
         editComment()
+        deleteComment()
     }
 }

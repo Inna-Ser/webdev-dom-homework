@@ -2,7 +2,6 @@ import {
     checkStatus401
 } from './exceptions.js'
 import {
-    // doFetchDeleteComment,
     setUser
 } from './main.js'
 
@@ -12,7 +11,7 @@ export const setToken = (newToken) => {
 }
 
 const todosURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments'
-// const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/id'
+const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/:id'
 const userURL = 'https://wedev-api.sky.pro/api/user/login'
 const newUserURL = 'https://wedev-api.sky.pro/api/user'
 
@@ -23,7 +22,6 @@ export function getTodos() {
             Authorization: token,
         },
     }).then((response) => {
-        console.log(response)
         return checkStatus401(response)
     })
 }
@@ -65,7 +63,6 @@ export function login({
             return response.json()
         })
         .then((response) => {
-            console.log(response)
             setUser(response.user)
             setToken(response.user.token)
         })
@@ -93,13 +90,15 @@ export function registration({
         })
 }
 
-export function deleteComment({
-    id
-}) {
-    return fetch(todosURL + '/' + id, {
+export function deleteToDo({id}) {
+    return fetch(todoURL, {
         method: 'DELETE',
         headers: {
             Authorization: token,
         },
-    }).then((response) => response.pop())
+    }).then((response) => {
+        console.log(response)
+    }).then((response) =>{
+response.slice(id, id)
+    })
 }

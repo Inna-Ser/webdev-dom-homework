@@ -55,9 +55,21 @@ export function deletLastComment() {
     const delCommentButton = document.getElementById('del-form-button')
     delCommentButton.addEventListener('click', () => {
         commentsListData.pop()
-        doFetchDeleteComment()
         renderCommentsList(commentsListData)
     })
+}
+
+export function deleteComment() {
+    const delCommentButton = document.querySelectorAll('.del-button')
+    for (const delComButton of delCommentButton) {
+        delComButton.addEventListener('click', (init) => {
+            init.stopPropagation()
+            const index = delComButton.closest('.comment').dataset.index
+            commentsListData.slice(index, index)
+            doFetchDeleteComment()
+        })
+        renderCommentsList(commentsListData)
+    }
 }
 
 export function inputLogin() {
@@ -91,8 +103,8 @@ export function addAnswerComment() {
     for (const commentElement of commentsElement) {
         commentElement.addEventListener('click', () => {
             const index = commentElement.closest('.comment').dataset.index
-            addFormTextElement.value = `QUOTE_BEGIN ${commentsListData[index].name}: 
-    ${commentsListData[index].comment} QUOTE_END`
+            addFormTextElement.innerHTML =
+                commentsListData[index].comment
         })
     }
     addFormTextElement.value = ''
@@ -134,7 +146,7 @@ export function addCounterLikes(commentsListData) {
         likeButtonElement.addEventListener('click', (event) => {
             event.stopPropagation()
 
-            const index = likeButtonElement.dataset.index
+            const index = likeButtonElement.closest(".comment").dataset.index
 
             delay(2000).then(() => {
                 commentsListData.likes = commentsListData.isLiked ?

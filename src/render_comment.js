@@ -1,14 +1,19 @@
 import {
   format
 } from 'date-fns'
-import { addCounterLikes, editComment } from './listeners'
-import { user } from './main'
+import {
+  addCounterLikes,
+  deleteComment,
+  editComment
+} from './listeners'
+import {
+  user
+} from './main'
 
 export function renderCommentsList(commentsListData) {
   const appElement = document.getElementById('comments')
   const commentsListHTML = commentsListData
     .map((com, index) => {
-      console.log(com)
       return `<li class="comment" id="comment" data-index="${index}" data-id="${
                 com.id
             }">
@@ -36,6 +41,9 @@ export function renderCommentsList(commentsListData) {
             <div class="edit-button">
               <button class="add-form-button -edit" id="edit-form-button">Редактировать</button>
             <div/>
+            <div class="del-button">
+              <button class="add-form-button -delete" id="delete-form-button">Удалить</button>
+            <div/>
         </div>
         </div>
       </li>`
@@ -44,9 +52,10 @@ export function renderCommentsList(commentsListData) {
 
   appElement.innerHTML = commentsListHTML
 
-  if(user) {
+  if (user) {
     editComment()
     addCounterLikes(commentsListData)
+    deleteComment()
   }
 
   // answerCommentListener();

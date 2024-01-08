@@ -5,7 +5,7 @@ import {
 } from './render_comment.js'
 
 import {
-    deleteComment,
+    deleteToDo,
     getTodos,
     postTodo
 } from './api.js'
@@ -91,8 +91,8 @@ export const doFetchPostComment = () => {
 }
 // doFetchPostComment()
 
-export const doFetchDeleteComment = () => {
-    deleteComment(commentsListData.id)
+export function doFetchDeleteComment() {
+    deleteToDo(commentsListData.id)
 }
 
 // doFetchDeleteComment()
