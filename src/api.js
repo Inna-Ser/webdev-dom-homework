@@ -1,7 +1,4 @@
 import {
-    remove
-} from 'lodash'
-import {
     checkStatus401
 } from './exceptions.js'
 import {
