@@ -1,13 +1,11 @@
 import {
-    deleteComment
-} from "./api"
-import {
     addAnswerComment,
     addCounterLikes,
     addTextComment,
     deletLastComment,
     editComment,
-    pullComment
+    pullComment,
+    deleteComment
 } from "./listeners"
 import {
     renderLogin

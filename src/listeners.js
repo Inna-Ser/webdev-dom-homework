@@ -64,9 +64,9 @@ export function deleteComment() {
     for (const delComButton of delCommentButton) {
         delComButton.addEventListener('click', (init) => {
             init.stopPropagation()
-            // const index = delComButton.closest('.comment').dataset.index
-            // commentsListData.slice(index)
-            doFetchDeleteComment()
+            const index = delComButton.closest('.comment').dataset.index
+            const postid = delCommentButton.indexOf(index)
+            doFetchDeleteComment(postid)
         })
         renderCommentsList(commentsListData)
     }

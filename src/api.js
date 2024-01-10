@@ -1,7 +1,11 @@
 import {
+    remove
+} from 'lodash'
+import {
     checkStatus401
 } from './exceptions.js'
 import {
+    commentsListData,
     setUser
 } from './main.js'
 
@@ -90,15 +94,13 @@ export function registration({
         })
 }
 
-export function deleteToDo({id}) {
+export function deleteToDo(postid) {
     return fetch(todoURL, {
         method: 'DELETE',
         headers: {
             Authorization: token,
         },
-    }).then((response) => {
-        console.log(response)
-    }).then((response) =>{
-response.slice(id, id)
+    }).then(() => {
+        commentsListData.splice(postid)
     })
 }

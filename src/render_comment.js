@@ -41,8 +41,8 @@ export function renderCommentsList(commentsListData) {
             <div class="edit-button">
               <button class="add-form-button -edit" id="edit-form-button">Редактировать</button>
             </div>
-            <div class="del-button">
-              <button class="add-form-button -delete" id="delete-form-button">Удалить</button>
+            <div class="del-button" >
+              <button class="add-form-button -delete" id="delete-form-button" data-index="${index}">Удалить</button>
             </div>
         </div>
         </div>
