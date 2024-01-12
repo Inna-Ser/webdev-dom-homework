@@ -91,8 +91,8 @@ export const doFetchPostComment = () => {
 }
 // doFetchPostComment()
 
-export function doFetchDeleteComment(postid) {
-    deleteToDo(postid)
+export function doFetchDeleteComment(id) {
+    deleteToDo(id)
 }
 
 // doFetchDeleteComment()

@@ -2,7 +2,7 @@ import {
     checkStatus401
 } from './exceptions.js'
 import {
-    commentsListData,
+    // commentsListData,
     setUser
 } from './main.js'
 
@@ -12,7 +12,7 @@ export const setToken = (newToken) => {
 }
 
 const todosURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments'
-const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/:id'
+// const todoURL = 'https://wedev-api.sky.pro/api/v2/inna-serebriakova/comments/?:id'
 const userURL = 'https://wedev-api.sky.pro/api/user/login'
 const newUserURL = 'https://wedev-api.sky.pro/api/user'
 
@@ -91,13 +91,16 @@ export function registration({
         })
 }
 
-export function deleteToDo(postid) {
-    return fetch(todoURL, {
+export function deleteToDo(id) {
+    return fetch(todosURL + '/' + id, {
         method: 'DELETE',
         headers: {
             Authorization: token,
         },
-    }).then(() => {
-        commentsListData.splice(postid)
+    }).then((response) => {
+        response.json()
+    }).then((response) => {
+        console.log(response)
+        response.remove()
     })
 }

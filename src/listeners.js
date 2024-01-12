@@ -65,10 +65,11 @@ export function deleteComment() {
         delComButton.addEventListener('click', (init) => {
             init.stopPropagation()
             const index = delComButton.closest('.comment').dataset.index
-            const postid = delCommentButton.indexOf(index)
-            doFetchDeleteComment(postid)
+            // const id = commentsListData.indexOf(index)
+            doFetchDeleteComment(index)
+            renderCommentsList(commentsListData)
+
         })
-        renderCommentsList(commentsListData)
     }
 }
 

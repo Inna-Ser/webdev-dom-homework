@@ -213,10 +213,9 @@ body {
   border: none;
   border-radius: 18px;
   cursor: pointer;
-
-  /* & __enter {
-    display: flex;
-  } */
+  -edit {
+    background-color: aqua;
+  }
 }
 
 .form-footer {
