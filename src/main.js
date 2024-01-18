@@ -60,7 +60,6 @@ export const doFetchGetCommentList = () => {
         })
 }
 
-
 export const doFetchPostComment = () => {
     const addLoader = document.querySelector('.loader-comment')
     const addFormTextElement = document.getElementById('add-form-text')
@@ -89,13 +88,13 @@ export const doFetchPostComment = () => {
             addLoader.textContent = ""
         })
 }
-// doFetchPostComment()
 
 export function doFetchDeleteComment(id) {
     deleteToDo(id)
+        .then(() => {
+            doFetchGetCommentList()
+        })
 }
-
-// doFetchDeleteComment()
 
 export function renderApp() {
     const containerApp = document.getElementById('app')

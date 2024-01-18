@@ -2,6 +2,7 @@ import {
   format
 } from 'date-fns'
 import {
+  addAnswerComment,
   addCounterLikes,
   deleteComment,
   editComment
@@ -37,14 +38,13 @@ export function renderCommentsList(commentsListData) {
           <button class="${
               com.isLike ? 'like-button -active-like ' : 'like-button'
           }" data-index="${index}"></button>
-      </div>
+        </div>
             <div class="edit-button">
               <button class="add-form-button -edit" id="edit-form-button">Редактировать</button>
             </div>
             <div class="del-button" >
               <button class="add-form-button -delete" id="delete-form-button" data-index="${index}">Удалить</button>
             </div>
-        </div>
         </div>
       </li>`
     })
@@ -56,15 +56,6 @@ export function renderCommentsList(commentsListData) {
     editComment()
     addCounterLikes(commentsListData)
     deleteComment()
+    addAnswerComment()
   }
-
-  // answerCommentListener();
-  // delLastComment(commentsListData);
-  // addTextComment();
-
-  // addNameComment();
-  // editComment();
-  // addByKey();
 }
-
-// pullComment();

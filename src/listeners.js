@@ -64,9 +64,9 @@ export function deleteComment() {
     for (const delComButton of delCommentButton) {
         delComButton.addEventListener('click', (init) => {
             init.stopPropagation()
-            const index = delComButton.closest('.comment').dataset.index
-            // const id = commentsListData.indexOf(index)
-            doFetchDeleteComment(index)
+            const postId = delComButton.closest('.comment').dataset.id
+            commentsListData.splice(delComButton, postId)
+            doFetchDeleteComment(postId)
             renderCommentsList(commentsListData)
 
         })
@@ -99,13 +99,20 @@ export function addRegistration() {
 }
 
 export function addAnswerComment() {
-    const commentsElement = document.querySelectorAll('.comment-text')
+    const commentsElement = document.querySelectorAll('.comment')
     const addFormTextElement = document.getElementById('add-form-text')
     for (const commentElement of commentsElement) {
         commentElement.addEventListener('click', () => {
             const index = commentElement.closest('.comment').dataset.index
-            addFormTextElement.innerHTML =
-                commentsListData[index].comment
+            addFormTextElement.innerHTML = commentsListData[index].comment
+            // if (!commentsListData[index].isEdit) {
+            //     commentsListData[index].isEdit = true
+            // } else {
+            //     commentsListData[index].isEdit = false
+            //     commentsListData[index].comment = addFormTextElement.value
+            // }
+            renderCommentsList(commentsListData)
+
         })
     }
     addFormTextElement.value = ''

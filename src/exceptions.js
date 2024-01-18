@@ -1,4 +1,6 @@
-import { getTodos } from './api.js'
+import {
+    getTodos
+} from './api.js'
 
 export function checkStatus500(response) {
     if (response.status === 500) {
@@ -30,7 +32,7 @@ export function checkStatus401(response) {
         getTodos()
         throw new Error('Нет авторизации')
     }
-    return response.json()
+    return response.json('')
 }
 
 export function todoException500(error) {
