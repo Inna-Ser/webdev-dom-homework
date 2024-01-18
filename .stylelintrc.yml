@@ -1,0 +1,7 @@
+extends:
+  - stylelint-prettier/recommended
+
+# Specify additional rules or overrides
+rules:
+  # Rule to enforce the use of double quotes for strings
+  string-quotes: "double"
