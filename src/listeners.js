@@ -104,14 +104,14 @@ export function addAnswerComment() {
     for (const commentElement of commentsElement) {
         commentElement.addEventListener('click', () => {
             const index = commentElement.closest('.comment').dataset.index
-            addFormTextElement.innerHTML = commentsListData[index].comment
+            addFormTextElement.value = commentsListData[index].comment
             // if (!commentsListData[index].isEdit) {
             //     commentsListData[index].isEdit = true
             // } else {
             //     commentsListData[index].isEdit = false
             //     commentsListData[index].comment = addFormTextElement.value
             // }
-            renderCommentsList(commentsListData)
+            // renderCommentsList(commentsListData)
 
         })
     }

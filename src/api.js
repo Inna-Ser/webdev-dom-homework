@@ -33,9 +33,9 @@ export function postTodo(addFormTextElement) {
         },
         body: JSON.stringify({
             text: addFormTextElement.value
+                .replaceAll('&', '&amp;')
                 .replaceAll('<', '&lt;')
                 .replaceAll('>', '&gt;')
-                .replaceAll('&', '&amp;')
                 .replaceAll('"', '&quot;')
                 .replaceAll(
                     'QUOTE_BEGIN',

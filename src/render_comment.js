@@ -56,6 +56,5 @@ export function renderCommentsList(commentsListData) {
     editComment()
     addCounterLikes(commentsListData)
     deleteComment()
-    addAnswerComment()
   }
 }
