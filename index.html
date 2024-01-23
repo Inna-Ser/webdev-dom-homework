@@ -1,139 +1,40 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
 
-  <body>
-    <div class="container">
-      <ul class="comments" id="comments">
-        <li class="comment" id="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <div class="add-form">
-        <input
-          type="text"
-          class="add-form-name"
-          id="add-form-name"
-          placeholder="Введите ваше имя"
-          value=""
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text"
-          id="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4" 
-          aria-valuetext=""
-        ></textarea>
-        <div class="add-form-row">
-          <button class="add-form-button" id="add-form-button">Написать</button>
-        </div>
+<head>
+  <title>Проект "Комменты"</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  
+  <!-- <div class="mask">
+    <div class="loader">Подождите, пожалуйста, комментарии загружаются</div>
+  </div>
+  <div class="container">
+    <ul class="comments" id="comments"> -->
+  <!-- список рендерится из JS -->
+  <!-- </ul>
+    <div class="mask-comment">
+      <div class="loader-comment">Комментарий загружается...</div>
+    </div>
+    <div class="add-form">
+      <input type="text" class="add-form-name" id="add-form-name" placeholder="Введите ваше имя" value="" />
+      <textarea type="textarea" class="add-form-text" id="add-form-text" placeholder="Введите ваш коментарий" rows="4"
+        aria-valuetext=""></textarea>
+      <div class="add-form-row">
+        <button class="add-form-button" id="add-form-button">Написать</button>
       </div>
     </div>
-  </body>
+    <div class="add-form-row">
+      <button class="add-form-button delete" id="del-form-button">Удалить последний комментарий</button>
+    </div>
+  </div> -->
+  <div id="app">
+  </div>
+</body>
+<script type="module" src="./main.js">
+</script>
 
-  <script>
-    "use strict";
-    const addFormButtonElement = document.getElementById("add-form-button");
-    const addFormTextElement = document.getElementById("add-form-text");
-    const addFormNameElement = document.getElementById("add-form-name");
-    const addFormElement = document.getElementById("add-form");
-    const commentsList = document.getElementById("comments");
-    const commentElement = document.getElementById("comment");
-
-    addFormButtonElement.addEventListener("click", () => {
-const allcomments = commentsList.innerHTML;
-
-addFormNameElement.style.backgroundColor = "";
-if(addFormNameElement.value === "") {
-  addFormNameElement.style.backgroundColor = "red";
-  return;
-}
-
-addFormTextElement.style.backgroundColor = "";
-if(addFormTextElement.value === "") {
-  addFormTextElement.style.backgroundColor = "red";
-  return;
-}
-
-let currentDate = new Date();
-let date = currentDate.getDate();
-let montch = currentDate.getMonth();
-let year = currentDate.getFullYear();
-let hours = currentDate.getHours();
-let minute = currentDate.getMinutes();
-if(date < 10) {
-  date = "0" + date;
-}
-if(montch < 10) {
-  montch = "0" + montch;
-}
-if(hours < 10) {
-  hours = "0" + hours;
-}
-if(minute < 10) {
-  minute = "0" + minute;
-}
-
-const yearForm = toString(year).split('').push([2], [3]);
-const comDate = date + "." + montch + "." + yearForm + " " + hours + ":" + minute;
-
-commentsList.innerHTML = allcomments + 
- `<li class="comment" id="comment">
-          <div class="comment-header">
-            <div>${addFormNameElement.value}</div>
-            <div>${comDate}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${addFormTextElement.value}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>`
-        addFormNameElement.value = "";
-        addFormTextElement.value = "";
-        });
-    console.log("It works!");
-  </script>
 </html>
